@@ -1,2 +1,2 @@
 # bubbly_ramen
- A fun online learning activities all in one platform :D
+ A fun interactive online learning platform to learn on-demand :D
