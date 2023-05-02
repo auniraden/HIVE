@@ -12,8 +12,6 @@
 - [x] ERD
 - [ ] Wireframe/Desktop 
 - [ ] Wireframe/Mobile
-- [ ] Prototype/Desktop 
-- [ ] Prototype/Mobile
 - [ ] Website nav. structure
 
 ## Implementation
