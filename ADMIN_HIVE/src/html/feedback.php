@@ -4,10 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HIVE ADMIN</title>
-  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/HIVE-logo_Tbg.png" />
+  <title>Modernize Free</title>
+  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -55,7 +54,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./registration.html" aria-expanded="false">
+              <a class="sidebar-link" href="./registration.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-user-plus"></i>
                 </span>
@@ -63,7 +62,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./userfeedback.html" aria-expanded="false">
+              <a class="sidebar-link" href="./feedback.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-message-dots"></i>
                 </span>
@@ -71,7 +70,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./generatereport.html" aria-expanded="false">
+              <a class="sidebar-link" href="./reports.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-clipboard-data"></i>
                 </span>
@@ -100,8 +99,8 @@
             </li>
             <li class="nav-item nav-item-pageTitle">
               <a class="nav-link" href="#">
-                <i class="ti ti-users"></i>
-                <span class="d-none d-lg-inline">Member Management</span>
+                <i class="ti ti-message-dots"></i>
+                <span class="d-none d-lg-inline">User Feedback</span>
               </a>
             </li>
             <li class="nav-item">
@@ -141,12 +140,89 @@
         </nav>
       </header>
       <!--  Header End -->
-
-      <div class="container-fluid grey-background">
+      <div class="container-fluid">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
-            <p class="mb-0">This is a sample page </p>
+            <div class="container">
+              <h1>FEEDBACK</h1>
+              
+              <!-- NEED TO WORK ON FEEDBACK TABLE -->
+              <div class="feedback-statistics">
+                  <h2>Feedback Statistics</h2>
+                  <div class="row">
+                  <div class="col-md-6">
+                      <div class="card">
+                      <div class="card-body">
+                          <h3>Total Feedbacks</h3>
+                          <p>100</p>
+                      </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="card">
+                      <div class="card-body">
+                          <h3>Average Rating</h3>
+                          <p>4.5</p>
+                      </div>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+          
+
+              <!-- Manage feedback -->
+          
+              <div class="feedback-management">
+                  <h2>Manage Feedback</h2>
+                  <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th><a href="?sort=feedbackID">Feedback ID</a></th>
+                      <th><a href="?sort=feedback">Feedback</a></th>
+                      <th><a href="?sort=date">Date</a></th>
+                      <th><a href="?sort=memberID">Member ID</a></th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                    <tbody>
+                      <?php
+                      $con = mysqli_connect("localhost", "root", "", "hive");
+                      // Get the sort parameter from the query string, by default it goes with empty string.
+                      $sort = isset($_GET['sort']) ? $_GET['sort'] : '';
+
+                      // Construct the SQL query with the sorting condition
+                      $sql = "SELECT FeedbackID, Feedback, Date, MemberID FROM feedback";
+
+                      //append the sql query following what clicked by user 
+                      if ($sort == 'feedbackID') {
+                          $sql .= " ORDER BY FeedbackID ASC";
+                      } elseif ($sort == 'feedback') {
+                          $sql .= " ORDER BY Feedback ASC";
+                      } elseif ($sort == 'date') {
+                          $sql .= " ORDER BY Date ASC";
+                      }elseif ($sort == 'memberID') {
+                          $sql .= " ORDER BY MemberID ASC";
+                      }
+
+                      $result = mysqli_query($con, $sql);
+
+                      while ($row = mysqli_fetch_array($result)) {
+                          echo '<tr>';
+                          echo '<td>'.$row['FeedbackID'].'</td>';
+                          echo '<td>'.$row['Feedback'].'</td>';
+                          echo '<td>'.$row['Date'].'</td>';
+                          echo '<td>'.$row['MemberID'].'</td>';
+                          echo '<td>';
+                          echo '<button class="btn btn-primary btn-sm">Edit</button>';
+                          echo '<button class="btn btn-danger btn-sm">Delete</button>';
+                          echo '</td>';
+                          echo '</tr>';
+                      }
+                      ?>
+                    </tbody>
+                  </table>
+              </div>
+              </div>
           </div>
         </div>
       </div>
@@ -157,6 +233,8 @@
   <script src="../assets/js/sidebarmenu.js"></script>
   <script src="../assets/js/app.min.js"></script>
   <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+
+
 </body>
 
 </html>

@@ -4,10 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HIVE ADMIN</title>
-  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/HIVE-logo_Tbg.png" />
+  <title>Modernize Free</title>
+  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
 </head>
 
 <body>
@@ -55,7 +55,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./registration.html" aria-expanded="false">
+              <a class="sidebar-link" href="./registration.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-user-plus"></i>
                 </span>
@@ -63,7 +63,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./userfeedback.html" aria-expanded="false">
+              <a class="sidebar-link" href="./feedback.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-message-dots"></i>
                 </span>
@@ -71,7 +71,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./generatereport.html" aria-expanded="false">
+              <a class="sidebar-link" href="./reports.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-clipboard-data"></i>
                 </span>
@@ -100,8 +100,8 @@
             </li>
             <li class="nav-item nav-item-pageTitle">
               <a class="nav-link" href="#">
-                <i class="ti ti-clipboard-data"></i>
-                <span class="d-none d-lg-inline">Generate Report</span>
+                <i class="ti ti-message-dots"></i>
+                <span class="d-none d-lg-inline">User Feedback</span>
               </a>
             </li>
             <li class="nav-item">
@@ -141,14 +141,72 @@
         </nav>
       </header>
       <!--  Header End -->
-
-      <div class="container-fluid grey-background">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
-            <p class="mb-0">This is a sample page </p>
+      <div class="container-fluid">
+      <h1>Reports</h1>
+        <div class="row">
+          <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="report-card">
+                <h6>Registered user monthly</h6>
+                <div id="chart1"></div>
+                <div class="report-description">
+                  <p>This report shows how many users registered as HIVE's member monthly</p>
+                  <a href="#" class="btn btn-primary">View</a>
+                </div>
+              </div>
+            </div> 
           </div>
+          </div>
+
+          <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="report-card">
+                <h6>Completed assesment</h6>
+                <div id="chart2"></div>
+                <div class="report-description">
+                  <p>This report shows the completed assesment that have been done by  HIVE's members</p>
+                  <a href="#" class="btn btn-primary">View</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="report-card">
+                <h6>User Progress</h6>
+                <div id="chart3"></div>
+                <div class="report-description">
+                  <p>This report indicates the current progress of user on their assesment</p>
+                  <a href="#" class="btn btn-primary">View</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="report-card">
+                <h6>Rating feedback</h6>
+                <div id="chart4"></div>
+                <div class="report-description">
+                  <p>This report illustrates the rating feedback given by the user.</p>
+                  <a href="#" class="btn btn-primary">View</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>          
+          
+
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -157,6 +215,58 @@
   <script src="../assets/js/sidebarmenu.js"></script>
   <script src="../assets/js/app.min.js"></script>
   <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+
+    <?php
+      $con = mysqli_connect("localhost", "root", "", "hive");
+
+      
+      $query = "SELECT MONTH(RegistrationDate) AS month, COUNT(*) AS total FROM member GROUP BY MONTH(RegistrationDate)";
+      $result = mysqli_query($con, $query);
+
+      
+      $data = [];
+      $monthNames = [
+        1 => 'Jan',
+        2 => 'Feb',
+        3 => 'Mar',
+        4 => 'Apr',
+        5 => 'May',
+        6 => 'Jun',
+        7 => 'Jul',
+        8 => 'Aug',
+        9 => 'Sep',
+        10 => 'Oct',
+        11 => 'Nov',
+        12 => 'Dec'
+      ];
+      while ($row = mysqli_fetch_assoc($result)) {
+          $data[] = [
+              'month' => $monthNames[$row['month']],
+              'total' => $row['total']
+          ];
+      }
+
+      // Generate the chart using ApexCharts library
+      echo '<script>
+        const data = ' . json_encode($data) . ';
+        const options = {
+          chart: {
+            type: "bar",
+          },
+          series: [{
+            name: "Total",
+            data: data.map(item => item.total),
+          }],
+          xaxis: {
+            categories: data.map(item => item.month),
+          },
+        };
+
+        const chart1 = new ApexCharts(document.querySelector("#chart1"), options);
+        chart1.render();
+      </script>';
+    ?>
+
 </body>
 
 </html>
