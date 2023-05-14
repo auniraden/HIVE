@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Modernize Free</title>
-  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../assets/images/logos//HIVE-logo_Tbg.png" />
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
   <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
 </head>
@@ -220,7 +220,7 @@
       $con = mysqli_connect("localhost", "root", "", "hive");
 
       
-      $query = "SELECT MONTH(RegistrationDate) AS month, COUNT(*) AS total FROM member GROUP BY MONTH(RegistrationDate)";
+      $query = "SELECT MONTH(RegistrationDate) AS month, COUNT(*) AS total FROM member GROUP BY MONTH(RegistrationDate) order by month ASC";
       $result = mysqli_query($con, $query);
 
       
