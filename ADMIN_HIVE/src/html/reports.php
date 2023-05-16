@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Modernize Free</title>
+  <title>HIVE</title>
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos//HIVE-logo_Tbg.png" />
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
   <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
@@ -100,8 +100,8 @@
             </li>
             <li class="nav-item nav-item-pageTitle">
               <a class="nav-link" href="#">
-                <i class="ti ti-message-dots"></i>
-                <span class="d-none d-lg-inline">User Feedback</span>
+                <i class="ti ti-clipboard-data"></i>
+                <span class="d-none d-lg-inline">Reports</span>
               </a>
             </li>
             <li class="nav-item">
@@ -166,7 +166,7 @@
                 <h6>Completed assesment</h6>
                 <div id="chart2"></div>
                 <div class="report-description">
-                  <p>This report shows the completed assesment that have been done by  HIVE's members</p>
+                  <p>This report shows the average score for each quiz</p>
                   <a href="#" class="btn btn-primary">View</a>
                 </div>
               </div>
@@ -202,9 +202,7 @@
               </div>
             </div>
           </div>
-          </div>          
-          
-
+          </div>         
         </div>
       </div>
       </div>
@@ -216,56 +214,102 @@
   <script src="../assets/js/app.min.js"></script>
   <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
 
-    <?php
-      $con = mysqli_connect("localhost", "root", "", "hive");
+  <?php
+  $con = mysqli_connect("localhost", "root", "", "hive");
 
-      
-      $query = "SELECT MONTH(RegistrationDate) AS month, COUNT(*) AS total FROM member GROUP BY MONTH(RegistrationDate) order by month ASC";
-      $result = mysqli_query($con, $query);
+  // Check the database connection
+  if (!$con) {
+    die("Connection failed: " . mysqli_connect_error());
+  }
 
-      
-      $data = [];
-      $monthNames = [
-        1 => 'Jan',
-        2 => 'Feb',
-        3 => 'Mar',
-        4 => 'Apr',
-        5 => 'May',
-        6 => 'Jun',
-        7 => 'Jul',
-        8 => 'Aug',
-        9 => 'Sep',
-        10 => 'Oct',
-        11 => 'Nov',
-        12 => 'Dec'
-      ];
-      while ($row = mysqli_fetch_assoc($result)) {
-          $data[] = [
-              'month' => $monthNames[$row['month']],
-              'total' => $row['total']
-          ];
-      }
+  // Report registered user monthly
+  $query = "SELECT MONTH(RegistrationDate) AS month, COUNT(*) AS total FROM member GROUP BY MONTH(RegistrationDate) ORDER BY month ASC";
+  $result = mysqli_query($con, $query);
 
-      // Generate the chart using ApexCharts library
-      echo '<script>
-        const data = ' . json_encode($data) . ';
-        const options = {
-          chart: {
-            type: "bar",
-          },
-          series: [{
-            name: "Total",
-            data: data.map(item => item.total),
-          }],
-          xaxis: {
-            categories: data.map(item => item.month),
-          },
-        };
+  // Check if the query executed successfully
+  if (!$result) {
+    die("Query failed: " . mysqli_error($con));
+  }
 
-        const chart1 = new ApexCharts(document.querySelector("#chart1"), options);
-        chart1.render();
-      </script>';
-    ?>
+  $data = [];
+  $monthNames = [
+    1 => 'Jan',
+    2 => 'Feb',
+    3 => 'Mar',
+    4 => 'Apr',
+    5 => 'May',
+    6 => 'Jun',
+    7 => 'Jul',
+    8 => 'Aug',
+    9 => 'Sep',
+    10 => 'Oct',
+    11 => 'Nov',
+    12 => 'Dec'
+  ];
+
+  while ($row = mysqli_fetch_assoc($result)) {
+    $data[] = [
+      'month' => $monthNames[$row['month']],
+      'total' => $row['total']
+    ];
+  }
+
+  // Report average score per Quizzez
+  $query = "SELECT QuizID, AVG(Score) AS average_score FROM membertakequiz GROUP BY QuizID";
+  $result = mysqli_query($con, $query);
+
+  // Check if the query executed successfully
+  if (!$result) {
+    die("Query failed: " . mysqli_error($con));
+  }
+
+  $data2 = [];
+  while ($row = mysqli_fetch_assoc($result)) {
+    $data2[] = [
+      'quiz' => $row['QuizID'],
+      'avg_score' => $row['average_score']
+    ];
+  }
+
+  mysqli_close($con);
+
+  // Generate the chart using ApexCharts library
+  echo '<script>
+    // Chart 1
+    const data = ' . json_encode($data) . ';
+    const options = {
+      chart: {
+        type: "bar",
+      },
+      series: [{
+        name: "Total",
+        data: data.map(item => item.total),
+      }],
+      xaxis: {
+        categories: data.map(item => item.month),
+      },
+    };
+    const chart1 = new ApexCharts(document.querySelector("#chart1"), options);
+    chart1.render();
+
+    // Chart 2
+    const data2 = ' . json_encode($data2) . ';
+    const options2 = {
+      chart: {
+        type: "bar",
+      },
+      series: [{
+        name: "Average Score",
+        data: data2.map(item => item.avg_score),
+      }],
+      xaxis: {
+        categories: data2.map(item => item.quiz),
+      },
+    };
+    const chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
+    chart2.render();
+  </script>';
+?>
 
 </body>
 
