@@ -1,3 +1,40 @@
+<?php
+// Delete
+if (isset($_POST['delete'])) {
+    $feedbackID = $_POST['feedbackID'];
+
+    $con = mysqli_connect("localhost", "root", "", "hive");
+    $sql = "DELETE FROM feedback WHERE FeedbackID = $feedbackID";
+    mysqli_query($con, $sql);
+    mysqli_close($con);
+
+    header("Location: feedback.php");
+    exit();
+}
+
+// get the feedback id from feedback page
+if (isset($_GET['feedbackID'])) {
+    $feedbackID = $_GET['feedbackID'];
+
+    $con = mysqli_connect("localhost", "root", "", "hive");
+
+    $query = "SELECT m.MemberID, m.Name, f.Feedback, f.Date, m.Email
+    FROM feedback f INNER JOIN member m ON f.MemberID = m.MemberID
+    WHERE f.FeedbackID = '$feedbackID'";
+
+
+    $result = mysqli_query($con, $query);
+    $row = mysqli_fetch_assoc($result);
+
+    $memberID = $row['MemberID'];
+    $name = $row['Name'];
+    $feedback = $row['Feedback'];
+    $date = $row['Date'];
+    $email = $row['Email'];
+    mysqli_close($con);
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -7,6 +44,12 @@
   <title>HIVE</title>
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos//HIVE-logo_Tbg.png" />
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
+  <script>
+        function showWindowMessage(message, redirectURL) {
+            alert(message);
+            window.location.href = redirectURL;
+        }
+    </script>
 </head>
 
 <body>
@@ -100,7 +143,7 @@
             <li class="nav-item nav-item-pageTitle">
               <a class="nav-link" href="#">
                 <i class="ti ti-message-dots"></i>
-                <span class="d-none d-lg-inline">User Feedback</span>
+                <span class="d-none d-lg-inline">Reply Feedback</span>
               </a>
             </li>
             <li class="nav-item">
@@ -143,89 +186,33 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-body">
-            <div class="container">
-              <h1>FEEDBACK</h1>
-              
-              <!-- NEED TO WORK ON FEEDBACK TABLE -->
-              <div class="feedback-statistics">
-                  <h2>Feedback Statistics</h2>
-                  <div class="row">
-                  <div class="col-md-6">
-                      <div class="card">
-                      <div class="card-body">
-                          <h3>Total Feedbacks</h3>
-                          <p>100</p>
-                      </div>
-                      </div>
-                  </div>
-                  <div class="col-md-6">
-                      <div class="card">
-                      <div class="card-body">
-                          <h3>Average Rating</h3>
-                          <p>4.5</p>
-                      </div>
-                      </div>
-                  </div>
-                  </div>
-              </div>
-          
-
-              <!-- Manage feedback -->
-          
-              <div class="feedback-management">
-                  <h2>Manage Feedback</h2>
-                  <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th><a href="?sort=feedbackID">Feedback ID</a></th>
-                      <th><a href="?sort=feedback">Feedback</a></th>
-                      <th><a href="?sort=date">Date</a></th>
-                      <th><a href="?sort=memberID">Member ID</a></th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                    <tbody>
-                      <?php
-                      $con = mysqli_connect("localhost", "root", "", "hive");
-                      // Get the sort parameter from the query string, by default it goes with empty string.
-                      $sort = isset($_GET['sort']) ? $_GET['sort'] : '';
-
-                      // Construct the SQL query with the sorting condition
-                      $sql = "SELECT FeedbackID, Feedback, Date, MemberID FROM feedback";
-
-                      //append the sql query following what clicked by user 
-                      if ($sort == 'feedbackID') {
-                          $sql .= " ORDER BY FeedbackID ASC";
-                      } elseif ($sort == 'feedback') {
-                          $sql .= " ORDER BY Feedback ASC";
-                      } elseif ($sort == 'date') {
-                          $sql .= " ORDER BY Date ASC";
-                      }elseif ($sort == 'memberID') {
-                          $sql .= " ORDER BY MemberID ASC";
-                      }
-
-                      $result = mysqli_query($con, $sql);
-
-                      while ($row = mysqli_fetch_array($result)) {
-                          echo '<tr>';
-                          echo '<td>'.$row['FeedbackID'].'</td>';
-                          echo '<td>'.$row['Feedback'].'</td>';
-                          echo '<td>'.$row['Date'].'</td>';
-                          echo '<td>'.$row['MemberID'].'</td>';
-                          echo '<td>';
-                          echo '<a href="replyfeedback.php?feedbackID=' . $row['FeedbackID'] . '" class="btn btn-primary btn-sm">Reply</a>';//anchor to reply feedback page
-                          echo '<form method="post" action="replyfeedback.php" style="display: inline;">
-                                  <input type="hidden" name="feedbackID" value="' . $row['FeedbackID'] . '">
-                                  <button type="submit" class="btn btn-danger btn-sm" name="delete" >Delete</button>
-                                </form>'; //bring the feedback id parameter to php 
-                          echo '</td>';
-                          echo '</tr>';
-                      }
-                      ?>
-                    </tbody>
-                  </table>
-              </div>
-              </div>
+          <div class="container">
+            <?php
+            if (isset($feedbackID)) {
+              echo '<h2>Reply to Feedback</h2>';
+              echo '<br/>';
+              echo '<p class="mb-3">Member ID: ' . $memberID . '</p>';
+              echo '<p class="mb-3">Name: ' . $name . '</p>';
+              echo '<p class="mb-3">Feedback: ' . $feedback . '</p>';
+              echo '<p class="mb-3">Date: ' . $date . '</p>';
+              echo '<form method="post" action="replyfeedback.php">';
+              echo '<input type="hidden" name="feedbackID" value="' . $feedbackID . '">';
+              echo '<div class="form-group mb-3">
+                      <label for="replyMessage">Reply Message:</label>
+                      <textarea id="replyMessage" name="replyMessage" class="form-control" rows="4" placeholder="Enter your reply"></textarea>
+                    </div>';
+              echo '<button type="submit" name="reply" class="btn btn-primary mr-2">Reply</button>';
+              echo '<button type="reset" class="btn btn-secondary">Reset</button>';
+              echo '</form>';
+            } elseif (isset($_POST['reply'])) {
+              $feedbackID = $_POST['feedbackID'];
+              $replyMessage = $_POST['replyMessage'];
+              $message = 'Feedback has been successfully replied!';
+              $redirectURL = 'feedback.php';
+              echo '<script>showWindowMessage("' . $message . '", "' . $redirectURL . '");</script>';
+            }
+            ?>
+          </div>
           </div>
         </div>
       </div>
