@@ -186,21 +186,22 @@ if (isset($_GET['feedbackID'])) {
       </header>
       <!--  Header End -->
       <div class="container-fluid">
-        <div class="card">
-          <div class="card-body">
+      <div class="card">
+        <div class="card-body">
           <div class="container">
             <?php
             if (isset($feedbackID)) {
               echo '<h2>Reply to Feedback</h2>';
-              echo '<br/>';
+              echo '<br>';
               echo '<p class="mb-3">Member ID: ' . $memberID . '</p>';
               echo '<p class="mb-3">Name: ' . $name . '</p>';
+              echo '<p class="mb-3">Email: ' . $email . '</p>';
               echo '<p class="mb-3">Feedback: ' . $feedback . '</p>';
               echo '<p class="mb-3">Date: ' . $date . '</p>';
               echo '<form method="post" action="replyfeedback.php">';
               echo '<input type="hidden" name="feedbackID" value="' . $feedbackID . '">';
-              echo '<div class="form-group mb-3">
-                      <label for="replyMessage">Reply Message:</label>
+              echo '<div class="mb-3">
+                      <label for="replyMessage" class="form-label">Reply Message:</label>
                       <textarea id="replyMessage" name="replyMessage" class="form-control" rows="4" placeholder="Enter your reply"></textarea>
                     </div>';
               echo '<button type="submit" name="reply" class="btn btn-primary mr-2">Reply</button>';
@@ -215,8 +216,8 @@ if (isset($_GET['feedbackID'])) {
             }
             ?>
           </div>
-          </div>
         </div>
+      </div>
       </div>
     </div>
   </div>

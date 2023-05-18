@@ -228,7 +228,7 @@
                           echo '<a href="replyfeedback.php?feedbackID=' . $row['FeedbackID'] . '" class="btn btn-primary btn-sm">Reply</a>';//anchor to reply feedback page
                           echo '<form method="post" action="replyfeedback.php" style="display: inline;">
                                   <input type="hidden" name="feedbackID" value="' . $row['FeedbackID'] . '">
-                                  <button type="submit" class="btn btn-danger btn-sm" name="delete" >Delete</button>
+                                  <button type="submit" class="btn btn-danger btn-sm" name="delete" onclick="return Delete();">Delete</button>
                                 </form>'; //bring the feedback id parameter to php 
                           echo '</td>';
                           echo '</tr>';
@@ -248,6 +248,11 @@
   <script src="../assets/js/sidebarmenu.js"></script>
   <script src="../assets/js/app.min.js"></script>
   <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+  <script>
+    function Delete() {
+        return confirm("Are you sure you want to delete this feedback?");
+    }
+</script>
 
 
 </body>

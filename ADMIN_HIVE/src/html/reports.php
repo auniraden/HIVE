@@ -152,7 +152,6 @@
                 <div id="chart1"></div>
                 <div class="report-description">
                   <p>This report shows how many users registered as HIVE's member monthly</p>
-                  <a href="#" class="btn btn-primary">View</a>
                 </div>
               </div>
             </div> 
@@ -167,7 +166,6 @@
                 <div id="chart2"></div>
                 <div class="report-description">
                   <p>This report shows the average score for each quiz</p>
-                  <a href="#" class="btn btn-primary">View</a>
                 </div>
               </div>
             </div>
@@ -182,7 +180,6 @@
                 <div id="chart3"></div>
                 <div class="report-description">
                   <p>This report indicates the current progress of user on their assesment</p>
-                  <a href="#" class="btn btn-primary">View</a>
                 </div>
               </div>
             </div>
@@ -197,7 +194,6 @@
                 <div id="chart4"></div>
                 <div class="report-description">
                   <p>This report illustrates the rating feedback given by the user.</p>
-                  <a href="#" class="btn btn-primary">View</a>
                 </div>
               </div>
             </div>
@@ -257,6 +253,7 @@
   // Report average score per Quizzez
   $query = "SELECT QuizID, AVG(Score) AS average_score FROM membertakequiz GROUP BY QuizID";
   $result = mysqli_query($con, $query);
+  
 
   // Check if the query executed successfully
   if (!$result) {
