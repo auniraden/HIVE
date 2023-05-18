@@ -4,9 +4,11 @@ if (isset($_POST['delete'])) {
     $feedbackID = $_POST['feedbackID'];
 
     $con = mysqli_connect("localhost", "root", "", "hive");
-    $sql = "DELETE FROM feedback WHERE FeedbackID = $feedbackID";
+    $sql = "DELETE FROM feedback WHERE FeedbackID = '$feedbackID'";
     mysqli_query($con, $sql);
     mysqli_close($con);
+
+    echo'Successfully deleted!';
 
     header("Location: feedback.php");
     exit();

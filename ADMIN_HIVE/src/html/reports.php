@@ -217,7 +217,7 @@
   <?php
   $con = mysqli_connect("localhost", "root", "", "hive");
 
-  // Check the database connection
+
   if (!$con) {
     die("Connection failed: " . mysqli_connect_error());
   }
@@ -226,7 +226,7 @@
   $query = "SELECT MONTH(RegistrationDate) AS month, COUNT(*) AS total FROM member GROUP BY MONTH(RegistrationDate) ORDER BY month ASC";
   $result = mysqli_query($con, $query);
 
-  // Check if the query executed successfully
+
   if (!$result) {
     die("Query failed: " . mysqli_error($con));
   }

@@ -150,22 +150,34 @@
               <div class="feedback-statistics">
                   <h2>Feedback Statistics</h2>
                   <div class="row">
-                  <div class="col-md-6">
-                      <div class="card">
-                      <div class="card-body">
-                          <h3>Total Feedbacks</h3>
-                          <p>100</p>
-                      </div>
-                      </div>
-                  </div>
-                  <div class="col-md-6">
-                      <div class="card">
-                      <div class="card-body">
-                          <h3>Average Rating</h3>
-                          <p>4.5</p>
-                      </div>
-                      </div>
-                  </div>
+                    <?php    
+                      $con = mysqli_connect("localhost", "root", "", "hive");
+                      $sql = "SELECT COUNT(*) AS Total FROM feedback";
+                      $query = "SELECT ROUND(AVG(Rating),1) AS AvgRating FROM feedback";
+                      $result = mysqli_query($con,$sql);
+                      $data = mysqli_fetch_assoc($result);
+                      $total = $data['Total'];
+                      $result = mysqli_query($con,$query);
+                      $data = mysqli_fetch_assoc($result);
+                      $AvgRating = $data['AvgRating'];
+
+                      echo '<div class="col-md-6">';
+                      echo '    <div class="card">';
+                      echo '    <div class="card-body">';
+                      echo '        <h3>Total Feedbacks</h3>';
+                      echo '        <p>' .$total. '</p>';
+                      echo '    </div>';
+                      echo '    </div>';
+                      echo '</div>';
+                      echo '<div class="col-md-6">';
+                      echo '    <div class="card">';
+                      echo '    <div class="card-body">';
+                      echo '        <h3>Average Rating</h3>';
+                      echo '        <p>'.$AvgRating.'</p>';
+                      echo '    </div>';
+                      echo '    </div>';
+                      echo '</div>';
+                  ?>
                   </div>
               </div>
           
