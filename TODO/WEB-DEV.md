@@ -15,19 +15,18 @@
 - [ ] Log out (sub-MENU/user account)
 
 ### Guest Page [non-HIVE member]
-- [ ] Landing page (guest menu)
+- [x] Landing page (guest menu)
 - [ ] HIVE member (MENU bar)--pop up to sign up
 - [ ] Log in (sub-MENU/HIVE member) -- pop up to sign in
 - [ ] Learn now! (MENU bar)/button to learning page (guest only limit to beginner learning resources)
-- [ ] How HIVE works (Footer/'Product')
-- [ ] Contribute (Footer/ 'Product')-- go to contribute page
+- [x] How HIVE works (Footer/'Product')
+- [x] Contribute (Footer/ 'Product')-- go to contribute page
 - [ ] Help Center (Footer/'Product') -- go to FQA page
-- [ ] About Us (Footer/'Company') -- go to About us page
-- [ ] Privacy Policy (Footer/'Company') -- go to this page
+- [x] About Us (Footer/'Company') -- go to About us page
+- [x] Privacy Policy (Footer/'Company') -- go to this page
 - [ ] Give Feedback (Footer/'Company') -- go to form page (can be embed google form)
-- [ ] Email us (Footer/'Contact Us') -- go to gmail (input our email as well)
+- [x] Email us (Footer/'Contact Us') -- go to gmail (input our email as well)
 - [ ] Learning material (Footer) -- a QR to learning resources page (more explore)
-- [ ] Admin (Footer) -- go to admin landing page (to sign in)
 
 ### Admin
 - [ ] Learning materials (add, edit, delete, view, search)
