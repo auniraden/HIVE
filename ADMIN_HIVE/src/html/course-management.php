@@ -7,10 +7,28 @@
   <title>HIVE ADMIN</title>
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos/HIVE-logo_Tbg.png" />
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
+  <link rel="stylesheet" href="../assets/css/jquery-ui.css />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 
-<body>
+<!-- Delete Pop-up Modal -->
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">Do you really want to delete this item?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary delete-confirm">Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<body class="grey-background">
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
@@ -19,7 +37,7 @@
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between mb-5 pt-3">
-          <a href="./index.html" class="text-nowrap logo-img">
+          <a href="./index.php" class="text-nowrap logo-img">
             <img src="../assets/images/logos/HIVE-logo_Tbg.png" width="70" alt="Hive Logo" />
             <span style="color:gold; font-weight:bold;">HIVE</span>
           </a>
@@ -31,7 +49,7 @@
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./index.html" aria-expanded="false">
+              <a class="sidebar-link" href="./index.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -39,7 +57,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./member-management.html" aria-expanded="false">
+              <a class="sidebar-link" href="./member-management.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-users"></i>
                 </span>
@@ -47,7 +65,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./course-management.html" aria-expanded="false">
+              <a class="sidebar-link" href="./course-management.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-book"></i>
                 </span>
@@ -100,8 +118,8 @@
             </li>
             <li class="nav-item nav-item-pageTitle">
               <a class="nav-link" href="#">
-                <i class="ti ti-users"></i>
-                <span class="d-none d-lg-inline">Member Management</span>
+                <i class="ti ti-book"></i>
+                <span class="d-none d-lg-inline">Course Management</span>
               </a>
             </li>
             <li class="nav-item">
@@ -141,21 +159,105 @@
         </nav>
       </header>
       <!--  Header End -->
-      <div class="container-fluid grey-background">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
-            <p class="mb-0">This is a sample page </p>
+
+      <div class="container-fluid">
+        <div class="col-lg-12 d-flex align-items-stretch">
+          <div class="card w-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title fw-semibold mb-4">Course</h5>
+                <a href="add-course.php" class="btn btn-primary btn-lg">Add Course</a>
+              </div>
+              <div class="table-responsive">
+                <table class="table text-nowrap mb-0 align-middle">
+                  <thead class="text-dark fs-4">
+                    <tr>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">ID</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Course Name</h6>
+                      </th>
+                      <th class="border-bottom-0">
+                        <h6 class="fw-semibold mb-0">Action</h6>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <?php
+                    include("config.php");
+                    $sql = "SELECT * FROM course";
+                    $result = mysqli_query($con, $sql);
+
+                    while ($row = mysqli_fetch_assoc($result))
+                    {
+                      echo '
+                        <tr>
+                          <td class="border-bottom-0"><h6 class="fw-semibold mb-0">' . $row["CourseID"] . '</h6></td>
+                          <td class="border-bottom-0">
+                              <h6 class="fw-semibold mb-1">' . $row["CourseName"] . '</h6>
+                          </td>
+                          <td>
+                            <a href="edit-course.php?id=' . $row["CourseID"] . '">
+                              <i class="ti ti-ballpen admin-to-user-action-icon" data-bs-toggle="tooltip" title="Edit"></i>
+                            </a>
+                            <a href="material-management.php?id=' . $row["CourseID"] . '&name='. $row["CourseName"] . '">
+                              <i class="ti ti-eye admin-to-user-action-icon" data-bs-toggle="tooltip" title="View Materials"></i>
+                            </a>
+                            <a href="#" class="course-delete" data-id="' . $row["CourseID"] . '" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                              <i class="ti ti-trash admin-to-user-action-icon" data-bs-toggle="tooltip" title="Delete"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      ';
+                    }
+                  ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
   <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="../assets/js/jquery-ui.js"></script>
   <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../assets/js/sidebarmenu.js"></script>
   <script src="../assets/js/app.min.js"></script>
   <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/6.0.0/bootbox.all.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('.course-delete').on('click', function() {
+        var item = this;
+        var deleteID = $(this).data('id');
+        $('.delete-confirm').on('click', function(e) {
+          $.ajax({
+            url: 'delete-course.php',
+            type: 'POST',
+            data: {'id': deleteID},
+            success: function(response) {
+              $(item).closest('tr').css('background', 'tomato');
+              $(item).closest('tr').fadeOut(800, function(){
+                $(this).remove();
+              });
+            }
+          });
+          $('#delete-modal').modal('hide');
+        });
+      });
+    });
+  </script>
+
+  <script>
+    // For Tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  </script>
 </body>
 
 </html>

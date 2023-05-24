@@ -16877,25 +16877,26 @@ ul {
 }
 .timeline-widget .timeline-item .timeline-badge.badge-primary {
   border: 2px solid #5d87ff;
-}.report-preview {
-  display: none;
 }
+.admin-to-user-action-icon {
+  font-size: 24px;
+  margin: 0px 2px;
+}
+.admin-to-user-action-icon:hover {
+  color: blue;
+}
+
 .report-card:hover .report-preview {
   display: block;
 }
 .report-card:hover .report-preview .report-description {
   display: none;
 }
-#chart {
-  width: 400px;
-  height: 300px;
-}
 .report-card {
   display: inline-block;
   width: 100%;
   margin-bottom: 15px;
 }
-
 .card-columns {
   column-count: 2;
   column-gap: 1.25rem;

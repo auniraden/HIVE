@@ -1,3 +1,56 @@
+<?php
+    include("config.php");
+    $id = 0;
+    $courseName = "";
+
+    $errorMsg = "";
+    $successMsg = "";
+
+    if($_SERVER["REQUEST_METHOD"] == "GET") {
+        if(!isset($_GET["id"])) {
+            header("location: course-management.php");
+            exit;
+        }
+        $id = $_GET["id"];
+
+        $sql = "SELECT * FROM course WHERE CourseID = '$id'";
+        $result = mysqli_query($con, $sql);
+        $row = mysqli_fetch_assoc($result);
+
+        if (!$row) {
+            header("location: course-management.php");
+            exit;
+        }
+
+        $courseName = $row['CourseName'];
+    }
+    else {
+        $id = $_POST['id'];
+        $courseName = $_POST['name'];
+
+        do {
+            if (empty($id) || empty($courseName)) {
+                $errorMsg = "All the Fields Are Required!";
+                break;
+            }
+
+            $sql = "UPDATE course ".
+                    "SET CourseName = '$courseName' WHERE CourseID = '$id'";
+
+            $result = mysqli_query($con, $sql);
+
+            if (!$result) {
+                $errorMsg = "Query Error: " . mysqli_error($con);
+                break;
+            }
+            $successMsg = "Course Updated Successfully!";
+
+            header("location: course-management.php");
+            exit;
+        }while(false);
+    }
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -10,7 +63,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 
-<body>
+<body class="grey-background">
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
@@ -19,7 +72,7 @@
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between mb-5 pt-3">
-          <a href="./index.html" class="text-nowrap logo-img">
+          <a href="./index.php" class="text-nowrap logo-img">
             <img src="../assets/images/logos/HIVE-logo_Tbg.png" width="70" alt="Hive Logo" />
             <span style="color:gold; font-weight:bold;">HIVE</span>
           </a>
@@ -31,7 +84,7 @@
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./index.html" aria-expanded="false">
+              <a class="sidebar-link" href="./index.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -39,127 +92,43 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./sample-page.html" aria-expanded="false">
+              <a class="sidebar-link" href="./member-management.php" aria-expanded="false">
                 <span>
-                  <i class="ti ti-layout-dashboard"></i>
+                  <i class="ti ti-users"></i>
                 </span>
                 <span class="hide-menu">Member Management</span>
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./sample-page.html" aria-expanded="false">
+              <a class="sidebar-link" href="./course-management.php" aria-expanded="false">
                 <span>
-                  <i class="ti ti-layout-dashboard"></i>
+                  <i class="ti ti-book"></i>
                 </span>
                 <span class="hide-menu">Course Management</span>
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./sample-page.html" aria-expanded="false">
+              <a class="sidebar-link" href="./registration.html" aria-expanded="false">
                 <span>
-                  <i class="ti ti-layout-dashboard"></i>
+                  <i class="ti ti-user-plus"></i>
                 </span>
                 <span class="hide-menu">Registration</span>
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./sample-page.html" aria-expanded="false">
+              <a class="sidebar-link" href="./userfeedback.html" aria-expanded="false">
                 <span>
-                  <i class="ti ti-layout-dashboard"></i>
+                  <i class="ti ti-message-dots"></i>
                 </span>
                 <span class="hide-menu">User Feedback</span>
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./sample-page.html" aria-expanded="false">
+              <a class="sidebar-link" href="./generatereport.html" aria-expanded="false">
                 <span>
-                  <i class="ti ti-layout-dashboard"></i>
+                  <i class="ti ti-clipboard-data"></i>
                 </span>
                 <span class="hide-menu">Generate Report</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">UI COMPONENTS</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-article"></i>
-                </span>
-                <span class="hide-menu">Buttons</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-alerts.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-alert-circle"></i>
-                </span>
-                <span class="hide-menu">Alerts</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-card.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-cards"></i>
-                </span>
-                <span class="hide-menu">Card</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-forms.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-file-description"></i>
-                </span>
-                <span class="hide-menu">Forms</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Typography</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">AUTH</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-login"></i>
-                </span>
-                <span class="hide-menu">Login</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user-plus"></i>
-                </span>
-                <span class="hide-menu">Register</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">EXTRA</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./icon-tabler.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-mood-happy"></i>
-                </span>
-                <span class="hide-menu">Icons</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./sample-page.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-aperture"></i>
-                </span>
-                <span class="hide-menu">Sample Page</span>
               </a>
             </li>
           </ul>
@@ -184,8 +153,8 @@
             </li>
             <li class="nav-item nav-item-pageTitle">
               <a class="nav-link" href="#">
-                <i class="ti ti-layout-dashboard"></i>
-                <span>Dashboard</span>
+                <i class="ti ti-book"></i>
+                <span class="d-none d-lg-inline">Course Management</span>
               </a>
             </li>
             <li class="nav-item">
@@ -227,10 +196,64 @@
       <!--  Header End -->
 
       <div class="container-fluid grey-background">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
-            <p class="mb-0">This is a sample page </p>
+        <div class="col-lg-12 d-flex align-items-stretch">
+          <div class="card w-100">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between">
+                    <h5 class="card-title fw-semibold mb-4">Edit Course</h5>
+                </div>
+
+                <?php
+                    if (!empty($errorMsg)) {
+                        echo'
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>' . $errorMsg . '</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        ';
+                    }
+                ?>
+
+                <form method="post">
+                    <input type="hidden" name="id" value="<?php echo $id; ?>">
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">ID</label>
+                        <div class="col-sm-6 mt-2">
+                            <b><?php echo $id; ?></b>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label" for="name">Course Name</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="name" value="<?php echo $courseName; ?>">
+                        </div>
+                    </div>
+
+                    <?php
+                        if (!empty($successMsg)) {
+                            echo'
+                                <div class="row mb-3">
+                                    <div class="col-sm-6">
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            <strong>' . $successMsg . '</strong>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ';
+                        }
+                    ?>
+
+                    <div class="row mb-3">
+                        <div class="offset-sm-3 col-sm-3 d-grid">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                        <div class="col-sm-3 d-grid">
+                            <a class="btn btn-outline-primary" href="course-management.php" role="button">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
           </div>
         </div>
       </div>

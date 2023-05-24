@@ -1,3 +1,62 @@
+<?php
+    include("config.php");
+    $matID = "";
+    $matName = "";
+    $matContent = "";
+    $courseID = "";
+    $courseName = "";
+    $errorMsg = "";
+    $successMsg = "";
+
+    if($_SERVER["REQUEST_METHOD"] == "GET") {
+        if(!isset($_GET["id"]) || !isset($_GET["name"])) {
+            header("location: course-management.php");
+            exit;
+        }
+        $courseID = $_GET["id"];
+        $courseName = $_GET["name"];
+
+        $query = "SELECT MAX(MaterialID) AS max_id FROM material";
+        $result = mysqli_query($con, $query);
+        $row = mysqli_fetch_assoc($result);
+        $max_id = $row['max_id'];
+        $matID = 'MT' . str_pad((intval(substr($max_id, 2)) + 1), 2, '0', STR_PAD_LEFT);
+    }
+
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        $matID = $_POST['matID'];
+        $matName = $_POST['matName'];
+        $matContent = $_POST['matContent'];
+        $courseID = $_GET['id'];
+        $courseName = $_GET['name'];
+
+        do {
+            if (empty($matID) || empty($matName) || empty($matContent)) {
+                $errorMsg = "All the Fields Are Required!";
+                break;
+            }
+
+            $sql = "INSERT INTO material VALUES ('$matID','$matName','$matContent','$courseID')";
+
+            $result = mysqli_query($con, $sql);
+
+            if (!$result) {
+                $errorMsg = "Query Error: " . mysqli_error($con);
+                break;
+            }
+
+            $successMsg = "Material Updated Successfully!";
+
+            $query = "SELECT MAX(MaterialID) AS max_id FROM material";
+            $result = mysqli_query($con, $query);
+            $row = mysqli_fetch_assoc($result);
+            $max_id = $row['max_id'];
+            $matID = 'MT' . str_pad((intval(substr($max_id, 2)) + 1), 2, '0', STR_PAD_LEFT);
+
+        }while(false);
+    }
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -10,7 +69,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 
-<body>
+<body class="grey-background">
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
@@ -19,7 +78,7 @@
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between mb-5 pt-3">
-          <a href="./index.html" class="text-nowrap logo-img">
+          <a href="./index.php" class="text-nowrap logo-img">
             <img src="../assets/images/logos/HIVE-logo_Tbg.png" width="70" alt="Hive Logo" />
             <span style="color:gold; font-weight:bold;">HIVE</span>
           </a>
@@ -31,7 +90,7 @@
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./index.html" aria-expanded="false">
+              <a class="sidebar-link" href="./index.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -39,7 +98,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./member-management.html" aria-expanded="false">
+              <a class="sidebar-link" href="./member-management.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-users"></i>
                 </span>
@@ -47,7 +106,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./course-management.html" aria-expanded="false">
+              <a class="sidebar-link" href="./course-management.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-book"></i>
                 </span>
@@ -101,7 +160,7 @@
             <li class="nav-item nav-item-pageTitle">
               <a class="nav-link" href="#">
                 <i class="ti ti-book"></i>
-                <span class="d-none d-lg-inline">Course Management</span>
+                <span class="d-none d-lg-inline">Material Management</span>
               </a>
             </li>
             <li class="nav-item">
@@ -143,10 +202,65 @@
       <!--  Header End -->
 
       <div class="container-fluid grey-background">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
-            <p class="mb-0">This is a sample page </p>
+        <div class="col-lg-12 d-flex align-items-stretch">
+          <div class="card w-100">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between">
+                    <h5 class="card-title fw-semibold mb-4">Add Material for <?php echo $courseName ?></h5>
+                </div>
+
+                <?php
+                    if (!empty($errorMsg)) {
+                        echo'
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong id="errorMsg">' . $errorMsg . '</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        ';
+                    }
+                ?>
+
+                <?php
+                    if (!empty($successMsg)) {
+                        echo'
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>' . $successMsg . '</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        ';
+                    }
+                ?>
+
+                <form method="post">
+                    <input type="hidden" name="matID" id="matID" value="<?php echo $matID; ?>">
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">ID</label>
+                        <div class="col-sm-6 mt-2">
+                            <b><?php echo $matID; ?></b>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label" for="matName">Material Name</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="matName" id="matName">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label" for="matContent">Material Content</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control" name="matContent" rows="20" id="matContent"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="offset-sm-3 col-sm-3 d-grid">
+                            <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                        </div>
+                        <div class="col-sm-3 d-grid">
+                            <a class="btn btn-outline-primary" href="course-management.php" role="button">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
           </div>
         </div>
       </div>
@@ -157,6 +271,34 @@
   <script src="../assets/js/sidebarmenu.js"></script>
   <script src="../assets/js/app.min.js"></script>
   <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+  <script>
+    $(document).ready(function() {
+        $('#submit').click( function(){
+            var matID = $('#matID').val();
+            var matName = $('#matName').val();
+            var matContent = $('#matContent').val();
+            if(matName === '' || matContent === '') {
+                return;
+            }
+            else{
+                $('#errorMsg').text('');
+                //proceed with submission
+                $.ajax({
+                    url:'',
+                    type:'post',
+                    data:{
+                        'id': matID,
+                        'name': matName,
+                        'content': matContent,
+                    },
+                    success:function(response){
+                        alert(response);
+                    }
+                });
+            }
+        });
+    });
+  </script>
 </body>
 
 </html>
