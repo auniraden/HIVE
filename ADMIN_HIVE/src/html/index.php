@@ -218,16 +218,8 @@
                   <div class="mb-3 mb-sm-0">
                     <h5 class="card-title fw-semibold">Number of Visitors Over Time</h5>
                   </div>
-                  <div>
-                    <select class="form-select">
-                      <option value="1">March 2023</option>
-                      <option value="2">April 2023</option>
-                      <option value="3">May 2023</option>
-                      <option value="4">June 2023</option>
-                    </select>
-                  </div>
                 </div>
-                <div id="chart"></div>
+                <div id="visitChart"></div>
               </div>
             </div>
           </div>
@@ -337,8 +329,49 @@
   <script src="../assets/js/sidebarmenu.js"></script>
   <script src="../assets/js/app.min.js"></script>
   <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
   <script src="../assets/js/dashboard.js"></script>
+  <script>
+    $(document).ready(function() {
+      var dates = [];
+      var counts = [];
+
+      $.ajax({
+        url: 'fetch-visit-data.php',
+        type: "get",
+        dataType: "json",
+        success: function(response) {
+          for(var i = 0; i < response.length; i++) {
+            dates.push(response[i].visitDate);
+            counts.push(response[i].visitCount);
+          }
+          showGraph(dates, counts);
+        }
+      })
+
+      function showGraph(dates, counts) {
+        var options = {
+          chart:{
+            type: 'line',
+            height: 400
+          },
+          noData: {
+              text: 'Loading...'
+          },
+          series: [{
+            data: counts
+          }],
+          xaxis: {
+            categories: dates
+          }
+        }
+
+        var chart = new ApexCharts(document.querySelector("#visitChart"), options);
+        chart.render();
+      }
+    });
+  </script>
 </body>
 
 </html>
