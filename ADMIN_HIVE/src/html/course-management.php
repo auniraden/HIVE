@@ -7,7 +7,7 @@
   <title>HIVE ADMIN</title>
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos/HIVE-logo_Tbg.png" />
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
-  <link rel="stylesheet" href="../assets/css/jquery-ui.css />
+  <link rel="stylesheet" href="../assets/css/jquery-ui.css" />  
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 
@@ -96,6 +96,12 @@
                 <span class="hide-menu">Generate Report</span>
               </a>
             </li>
+            <li class="sidebar-item">
+            <a class="sidebar-link" href="logout.php" aria-expanded="false">
+              <i class="bi bi-box-arrow-left" style="font-size: 1.5em;"></i>
+              <span class="hide-menu">Logout</span>
+            </a>
+          </li>
           </ul>
         </nav>
         <!-- End Sidebar navigation -->

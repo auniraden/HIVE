@@ -1,4 +1,6 @@
 <?php
+session_start();
+$adminID = $_SESSION['adminID'];
 // Delete
 if (isset($_POST['delete'])) {
     $feedbackID = $_POST['feedbackID'];
@@ -20,7 +22,7 @@ if (isset($_GET['feedbackID'])) {
 
     $con = mysqli_connect("localhost", "root", "", "hive");
 
-    $query = "SELECT m.MemberID, m.Name, f.Feedback, f.Date, m.Email
+    $query = "SELECT m.MemberID, m.Name, f.Feedback, f.Date, m.Email, f.Rating
     FROM feedback f INNER JOIN member m ON f.MemberID = m.MemberID
     WHERE f.FeedbackID = '$feedbackID'";
 
@@ -33,6 +35,7 @@ if (isset($_GET['feedbackID'])) {
     $feedback = $row['Feedback'];
     $date = $row['Date'];
     $email = $row['Email'];
+    $rating = $row['Rating'];
     mysqli_close($con);
 }
 ?>
@@ -46,6 +49,7 @@ if (isset($_GET['feedbackID'])) {
   <title>HIVE</title>
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos//HIVE-logo_Tbg.png" />
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
   <script>
         function showWindowMessage(message, redirectURL) {
             alert(message);
@@ -63,7 +67,7 @@ if (isset($_GET['feedbackID'])) {
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between mb-5 pt-3">
-          <a href="./index.html" class="text-nowrap logo-img">
+          <a href="./index.php" class="text-nowrap logo-img">
             <img src="../assets/images/logos/HIVE-logo_Tbg.png" width="70" alt="Hive Logo" />
             <span style="color:gold; font-weight:bold;">HIVE</span>
           </a>
@@ -75,7 +79,7 @@ if (isset($_GET['feedbackID'])) {
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./index.html" aria-expanded="false">
+              <a class="sidebar-link" href="./index.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -83,7 +87,7 @@ if (isset($_GET['feedbackID'])) {
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./member-management.html" aria-expanded="false">
+              <a class="sidebar-link" href="./member-management.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-users"></i>
                 </span>
@@ -91,7 +95,7 @@ if (isset($_GET['feedbackID'])) {
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./course-management.html" aria-expanded="false">
+              <a class="sidebar-link" href="./course-management.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-book"></i>
                 </span>
@@ -122,6 +126,12 @@ if (isset($_GET['feedbackID'])) {
                 <span class="hide-menu">Generate Report</span>
               </a>
             </li>
+            <li class="sidebar-item">
+            <a class="sidebar-link" href="logout.php" aria-expanded="false">
+              <i class="bi bi-box-arrow-left" style="font-size: 1.5em;"></i>
+              <span class="hide-menu">Logout</span>
+            </a>
+          </li>
           </ul>
         </nav>
         <!-- End Sidebar navigation -->
@@ -190,6 +200,7 @@ if (isset($_GET['feedbackID'])) {
         <div class="card-body">
           <div class="container">
             <?php
+
             if (isset($feedbackID)) {
               echo '<h2>Reply to Feedback</h2>';
               echo '<br>';
@@ -197,6 +208,7 @@ if (isset($_GET['feedbackID'])) {
               echo '<p class="mb-3">Name: ' . $name . '</p>';
               echo '<p class="mb-3">Email: ' . $email . '</p>';
               echo '<p class="mb-3">Feedback: ' . $feedback . '</p>';
+              echo '<p class="mb-3">Rating: ' . $rating . '</p>';
               echo '<p class="mb-3">Date: ' . $date . '</p>';
               echo '<form method="post" action="replyfeedback.php">';
               echo '<input type="hidden" name="feedbackID" value="' . $feedbackID . '">';
@@ -212,8 +224,43 @@ if (isset($_GET['feedbackID'])) {
               $replyMessage = $_POST['replyMessage'];
               $message = 'Feedback has been successfully replied!';
               $redirectURL = 'feedback.php';
+              
+              //update status
+              $con = mysqli_connect("localhost", "root", "", "hive");
+              $query = "UPDATE `feedback` SET `Status`='Replied' WHERE FeedbackID = '$feedbackID'";
+              mysqli_query($con, $query);
+              mysqli_close($con);
+
+
+              // Current date
+              $dateReplied = date("Y-m-d");
+
+              // Generate auto-incremented ReplyFeedbackID
+              $con = mysqli_connect("localhost", "root", "", "hive");
+              $query = "SELECT MAX(ReplyFeedbackID) AS max_id FROM reply_feedback";
+              $result = mysqli_query($con, $query);
+              $row = mysqli_fetch_assoc($result);
+              $max_id = $row['max_id'];
+              $rf_id = 'RF' . str_pad((intval(substr($max_id, 2)) + 1), 2, '0', STR_PAD_LEFT);
+
+
+              //get memberID and name 
+              $query = "SELECT m.MemberID, m.Name FROM feedback f INNER JOIN member m ON f.MemberID = m.MemberID
+                        WHERE f.FeedbackID = '$feedbackID'";
+
+              $result = mysqli_query($con, $query);
+              $row = mysqli_fetch_assoc($result);
+              $memberID = $row['MemberID'];
+              $name = $row['Name'];
+
+              // Update reply_feedback table
+              $query = "INSERT INTO reply_feedback VALUES ('$rf_id', '$feedbackID', '$memberID', '$name', '$replyMessage', '$adminID', '$dateReplied')"; // Added comma after $rf_id
+              mysqli_query($con, $query);
+              mysqli_close($con);
               echo '<script>showWindowMessage("' . $message . '", "' . $redirectURL . '");</script>';
-            }
+             }
+  
+
             ?>
           </div>
         </div>

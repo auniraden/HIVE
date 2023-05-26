@@ -7,6 +7,7 @@
   <title>HIVE</title>
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos//HIVE-logo_Tbg.png" />
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
   <script src="../assets/libs/apexcharts/dist/apexcharts.min.js"></script>
 </head>
 
@@ -19,7 +20,7 @@
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between mb-5 pt-3">
-          <a href="./index.html" class="text-nowrap logo-img">
+          <a href="./index.php" class="text-nowrap logo-img">
             <img src="../assets/images/logos/HIVE-logo_Tbg.png" width="70" alt="Hive Logo" />
             <span style="color:gold; font-weight:bold;">HIVE</span>
           </a>
@@ -31,7 +32,7 @@
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./index.html" aria-expanded="false">
+              <a class="sidebar-link" href="./index.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -39,7 +40,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./member-management.html" aria-expanded="false">
+              <a class="sidebar-link" href="./member-management.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-users"></i>
                 </span>
@@ -47,7 +48,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./course-management.html" aria-expanded="false">
+              <a class="sidebar-link" href="./course-management.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-book"></i>
                 </span>
@@ -78,6 +79,12 @@
                 <span class="hide-menu">Generate Report</span>
               </a>
             </li>
+            <li class="sidebar-item">
+            <a class="sidebar-link" href="logout.php" aria-expanded="false">
+              <i class="bi bi-box-arrow-left" style="font-size: 1.5em;"></i>
+              <span class="hide-menu">Logout</span>
+            </a>
+          </li>
           </ul>
         </nav>
         <!-- End Sidebar navigation -->
@@ -219,7 +226,7 @@
   }
 
   // Report registered user monthly
-  $query = "SELECT MONTH(RegistrationDate) AS month, COUNT(*) AS total FROM member GROUP BY MONTH(RegistrationDate) ORDER BY month ASC";
+  $query = "SELECT MONTH(CreatedDate) AS month, COUNT(*) AS total FROM member GROUP BY MONTH(CreatedDate) ORDER BY month ASC";
   $result = mysqli_query($con, $query);
 
 

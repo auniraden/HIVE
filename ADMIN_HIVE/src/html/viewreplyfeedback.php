@@ -1,3 +1,30 @@
+<?php
+// get the feedback id from feedback page (hyperlink "replied")
+if (isset($_GET['feedbackID'])) {
+  $feedbackID = $_GET['feedbackID'];
+
+  $con = mysqli_connect("localhost", "root", "", "hive");
+
+  $query = "SELECT ReplyFeedbackID, FeedbackID, MemberID, Name, FeedbackReplied, AdminID, DateReplied
+  FROM reply_feedback
+  WHERE FeedbackID = '$feedbackID'";
+
+
+  $result = mysqli_query($con, $query);
+  $row = mysqli_fetch_assoc($result);
+
+  $replyfeedbackID = $row['ReplyFeedbackID'];
+  $feedbackID = $row['FeedbackID'];
+  $memberID = $row['MemberID'];
+  $name = $row['Name'];
+  $feedbackReplied = $row['FeedbackReplied'];
+  $adminID = $row['AdminID'];
+  $date = $row['DateReplied'];
+  mysqli_close($con);
+}
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -107,7 +134,7 @@
             <li class="nav-item nav-item-pageTitle">
               <a class="nav-link" href="#">
                 <i class="ti ti-message-dots"></i>
-                <span class="d-none d-lg-inline">User Feedback</span>
+                <span class="d-none d-lg-inline">Reply Feedback</span>
               </a>
             </li>
             <li class="nav-item">
@@ -148,121 +175,30 @@
       </header>
       <!--  Header End -->
       <div class="container-fluid">
-        <div class="card">
-          <div class="card-body">
-            <div class="container">
-              <h1>FEEDBACK</h1>
-              
-              <!-- NEED TO WORK ON FEEDBACK TABLE -->
-              <div class="feedback-statistics">
-                  <h2>Feedback Statistics</h2>
-                  <div class="row">
-                    <?php    
-                      $con = mysqli_connect("localhost", "root", "", "hive");
-                      $sql = "SELECT COUNT(*) AS Total FROM feedback";
-                      $query = "SELECT ROUND(AVG(Rating),1) AS AvgRating FROM feedback";
-                      $result = mysqli_query($con,$sql);
-                      $data = mysqli_fetch_assoc($result);
-                      $total = $data['Total'];
-                      $result = mysqli_query($con,$query);
-                      $data = mysqli_fetch_assoc($result);
-                      $AvgRating = $data['AvgRating'];
-
-                      echo '<div class="col-md-6">';
-                      echo '    <div class="card">';
-                      echo '    <div class="card-body">';
-                      echo '        <h3>Total Feedbacks</h3>';
-                      echo '        <p>' .$total. '</p>';
-                      echo '    </div>';
-                      echo '    </div>';
-                      echo '</div>';
-                      echo '<div class="col-md-6">';
-                      echo '    <div class="card">';
-                      echo '    <div class="card-body">';
-                      echo '        <h3>Average Rating</h3>';
-                      echo '        <p>'.$AvgRating.'</p>';
-                      echo '    </div>';
-                      echo '    </div>';
-                      echo '</div>';
-                  ?>
-                  </div>
-              </div>
-          
-
-              <!-- Manage feedback -->
-          
-              <div class="feedback-management">
-                  <h2>Manage Feedback</h2>
-                  <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th><a href="?sort=feedbackID">Feedback ID</a></th>
-                      <th><a href="?sort=feedback">Feedback</a></th>
-                      <th><a href="?sort=date">Date</a></th>
-                      <th><a href="?sort=rating">Rating</a></th>
-                      <th>Status</th>
-                      <th><a href="?sort=memberID">Member ID</a></th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                    <tbody>
-                      <?php
-                      $con = mysqli_connect("localhost", "root", "", "hive");
-                      // Get the sort parameter from the query string, by default it goes with empty string.
-                      $sort = isset($_GET['sort']) ? $_GET['sort'] : '';
-
-                      // Construct the SQL query with the sorting condition
-                      $sql = "SELECT FeedbackID, Feedback, Date, MemberID, Rating, Status FROM feedback";
-
-                      //append the sql query following what clicked by user 
-                      if ($sort == 'feedbackID') {
-                          $sql .= " ORDER BY FeedbackID ASC";
-                      } elseif ($sort == 'feedback') {
-                          $sql .= " ORDER BY Feedback ASC";
-                      } elseif ($sort == 'date') {
-                          $sql .= " ORDER BY Date ASC";
-                      }elseif ($sort == 'memberID') {
-                          $sql .= " ORDER BY MemberID ASC";
-                      }elseif ($sort == 'rating') {
-                        $sql .= " ORDER BY Rating ASC";
-                     }
-
-                      $result = mysqli_query($con, $sql);
-
-                      while ($row = mysqli_fetch_array($result)) {                     
-                            echo '<tr>';
-                            echo '<td>'.$row['FeedbackID'].'</td>';
-                            echo '<td>'.$row['Feedback'].'</td>';
-                            echo '<td>'.$row['Date'].'</td>';
-                            echo '<td>'.$row['Rating'].'</td>';
-                            echo '<td>';
-                            if ($row['Status'] === "Replied") {
-                              echo '<a href="viewreplyfeedback.php?feedbackID=' . $row['FeedbackID'] . '">Replied</a>';
-                            } else {
-                              echo $row['Status'];
-                            }
-                            echo '</td>';
-                            echo '<td>'.$row['MemberID'].'</td>';
-                            echo '<td>';
-                            if ($row['Status'] === "Replied") {
-                              echo '<button type="button" class="btn btn-primary btn-sm" disabled>Reply</button>';
-                            } else {
-                              echo '<a href="replyfeedback.php?feedbackID=' . $row['FeedbackID'].'" class="btn btn-primary btn-sm">Reply</a>';//anchor to reply feedback page
-                            }
-                            echo '<form method="post" action="replyfeedback.php" style="display: inline;">
-                                    <input type="hidden" name="feedbackID" value="' . $row['FeedbackID'] . '">
-                                    <button type="submit" class="btn btn-danger btn-sm" name="delete" onclick="return Delete();">Delete</button>
-                                  </form>'; //bring the feedback id parameter to php 
-                            echo '</td>';
-                            echo '</tr>';
-                      }
-                      ?>
-                    </tbody>
-                  </table>
-              </div>
-              </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="container">
+            <?php
+            if (isset($feedbackID)) {
+              echo '<h2>Feedback Replied</h2>';
+              echo '<br>';
+              echo '<p class="mb-3">Reply Feedback ID: ' . $replyfeedbackID . '</p>';
+              echo '<p class="mb-3">Feedback ID: ' . $feedbackID . '</p>';
+              echo '<p class="mb-3">Member ID: ' . $memberID . '</p>';
+              echo '<p class="mb-3">Name: ' . $name . '</p>';
+              echo '<p class="mb-3">Feedback Replied: ' . $feedbackReplied . '</p>';
+              echo '<p class="mb-3">Admin in charged: ' . $adminID . '</p>';
+              echo '<p class="mb-3">Date Replied: ' . $date . '</p>';
+              echo '<form method="post" action="replyfeedback.php">';
+              echo '<input type="hidden" name="feedbackID" value="' . $feedbackID . '">';
+            }       
+            ?>
+            <div class="mt-3">
+              <a href="feedback.php" class="btn btn-primary">Back</a>
+            </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -271,11 +207,6 @@
   <script src="../assets/js/sidebarmenu.js"></script>
   <script src="../assets/js/app.min.js"></script>
   <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
-  <script>
-    function Delete() {
-        return confirm("Are you sure you want to delete this feedback?");
-    }
-</script>
 
 
 </body>

@@ -1,28 +1,38 @@
 <?php
-  include("config.php");
-  $sql = "SELECT COUNT(*) AS MemberCount FROM member";
-  $result = mysqli_query($con, $sql);
-  $data = mysqli_fetch_assoc($result);
-  $memberCount = $data['MemberCount'];
+  //passing adminID (loggedin)
+  session_start();
+  if (isset($_SESSION['adminID'])) {
+      $adminID = $_SESSION['adminID'];
+      include("config.php");
+      $sql = "SELECT COUNT(*) AS MemberCount FROM member";
+      $result = mysqli_query($con, $sql);
+      $data = mysqli_fetch_assoc($result);
+      $memberCount = $data['MemberCount'];
+    
+      $sql = "SELECT COUNT(*) AS AdminCount FROM admin";
+      $result = mysqli_query($con, $sql);
+      $data = mysqli_fetch_assoc($result);
+      $adminCount = $data['AdminCount'];
+    
+      $sql = "SELECT COUNT(*) AS MemRegLstWkCount FROM member WHERE
+              CreatedDate BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) AND
+              DATE_SUB(CURRENT_DATE(), INTERVAL -1 DAY)";
+      $result = mysqli_query($con, $sql);
+      $data = mysqli_fetch_assoc($result);
+      $memberRegLstWkCount = $data['MemRegLstWkCount'];
+    
+      $sql = "SELECT COUNT(*) AS GuestVisitCount FROM guest_visit WHERE
+              VisitDate BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) AND
+              DATE_SUB(CURRENT_DATE(), INTERVAL -1 DAY)";
+      $result = mysqli_query($con, $sql);
+      $data = mysqli_fetch_assoc($result);
+      $guestVisitCount = $data['GuestVisitCount'];
+    }else{
+      echo 'went wrong';
+    }
 
-  $sql = "SELECT COUNT(*) AS AdminCount FROM admin";
-  $result = mysqli_query($con, $sql);
-  $data = mysqli_fetch_assoc($result);
-  $adminCount = $data['AdminCount'];
 
-  $sql = "SELECT COUNT(*) AS MemRegLstWkCount FROM member WHERE
-          CreatedDate BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) AND
-          DATE_SUB(CURRENT_DATE(), INTERVAL -1 DAY)";
-  $result = mysqli_query($con, $sql);
-  $data = mysqli_fetch_assoc($result);
-  $memberRegLstWkCount = $data['MemRegLstWkCount'];
 
-  $sql = "SELECT COUNT(*) AS GuestVisitCount FROM guest_visit WHERE
-          VisitDate BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) AND
-          DATE_SUB(CURRENT_DATE(), INTERVAL -1 DAY)";
-  $result = mysqli_query($con, $sql);
-  $data = mysqli_fetch_assoc($result);
-  $guestVisitCount = $data['GuestVisitCount'];
 ?>
 
 <!doctype html>
@@ -90,7 +100,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./feedback.php" aria-expanded="false">
+            <a class="sidebar-link" href="./feedback.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-message-dots"></i>
                 </span>
@@ -104,7 +114,15 @@
                 </span>
                 <span class="hide-menu">Generate Report</span>
               </a>
+            </li>
+            <li class="sidebar-item">
+            <a class="sidebar-link" href="logout.php" aria-expanded="false">
+              <i class="bi bi-box-arrow-left" style="font-size: 1.5em;"></i>
+              <span class="hide-menu">Logout</span>
+            </a>
+          </li>
           </ul>
+
         </nav>
         <!-- End Sidebar navigation -->
       </div>

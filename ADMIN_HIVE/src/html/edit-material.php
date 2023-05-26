@@ -134,6 +134,12 @@
                 <span class="hide-menu">Generate Report</span>
               </a>
             </li>
+            <li class="sidebar-item">
+            <a class="sidebar-link" href="logout.php" aria-expanded="false">
+              <i class="bi bi-box-arrow-left" style="font-size: 1.5em;"></i>
+              <span class="hide-menu">Logout</span>
+            </a>
+          </li>
           </ul>
         </nav>
         <!-- End Sidebar navigation -->
