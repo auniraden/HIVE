@@ -149,63 +149,26 @@
       </header>
       <!--  Header End -->
       <div class="container-fluid">
-      <h1>Reports</h1>
-        <div class="row">
-          <div class="col-md-6">
-          <div class="card">
-            <div class="card-body">
-              <div class="report-card">
-                <h6>Registered user monthly</h6>
-                <div id="chart1"></div>
-                <div class="report-description">
-                  <p>This report shows how many users registered as HIVE's member monthly</p>
+        <h1 class="mt-4">Reports</h1>
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="card shadow">
+              <div class="card-body">
+                <div class="report-card">
+                  <div id="chart"></div>
+                  <div class="form-group mt-4 text-center">
+                    <label for="chartTypeDropdown">Select Chart Type:</label>
+                    <select class="form-control btn btn-primary" id="chartTypeDropdown" onchange="chartSelection(this.value)">
+                      <option value="default">Overall User Progress</option>
+                      <option value="averageScore">Average Score Quiz</option>
+                      <option value="registeredUser">Registered User</option>
+                      <option value="feedbackRating">Feedback Rating</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-            </div> 
-          </div>
-          </div>
-
-          <div class="col-md-6">
-          <div class="card">
-            <div class="card-body">
-              <div class="report-card">
-                <h6>Completed assesment</h6>
-                <div id="chart2"></div>
-                <div class="report-description">
-                  <p>This report shows the average score for each quiz</p>
-                </div>
-              </div>
+              </div> 
             </div>
-          </div>
-          </div>
-
-          <div class="col-md-6">
-          <div class="card">
-            <div class="card-body">
-              <div class="report-card">
-                <h6>User Progress</h6>
-                <div id="chart3"></div>
-                <div class="report-description">
-                  <p>This report indicates the current progress of user on their assesment</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          </div>
-
-          <div class="col-md-6">
-          <div class="card">
-            <div class="card-body">
-              <div class="report-card">
-                <h6>Rating feedback</h6>
-                <div id="chart4"></div>
-                <div class="report-description">
-                  <p>This report illustrates the rating feedback given by the user.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          </div>         
+          </div>       
         </div>
       </div>
       </div>
@@ -218,102 +181,503 @@
   <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
 
   <?php
-  $con = mysqli_connect("localhost", "root", "", "hive");
+    $con = mysqli_connect("localhost", "root", "", "hive");
 
+    if (!$con) {
+      die("Connection failed: " . mysqli_connect_error());
+    }
 
-  if (!$con) {
-    die("Connection failed: " . mysqli_connect_error());
-  }
+    //report overall user progress
+    $query = "SELECT Status, COUNT(*) AS total FROM membertakequiz GROUP BY Status";
+    $result = mysqli_query($con, $query);
 
-  // Report registered user monthly
-  $query = "SELECT MONTH(CreatedDate) AS month, COUNT(*) AS total FROM member GROUP BY MONTH(CreatedDate) ORDER BY month ASC";
-  $result = mysqli_query($con, $query);
+    // Check if the query executed successfully
+    if (!$result) {
+      die("Query failed: " . mysqli_error($con));
+    }
 
+    $overallProgressData = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+      $overallProgressData[] = [
+        'status' => $row['Status'],
+        'total' => $row['total']
+      ];
+    }
 
-  if (!$result) {
-    die("Query failed: " . mysqli_error($con));
-  }
+    // Report registered user monthly
+    $query = "SELECT MONTH(CreatedDate) AS month, COUNT(*) AS total FROM member GROUP BY MONTH(CreatedDate) ORDER BY month ASC";
+    $result = mysqli_query($con, $query);
 
-  $data = [];
-  $monthNames = [
-    1 => 'Jan',
-    2 => 'Feb',
-    3 => 'Mar',
-    4 => 'Apr',
-    5 => 'May',
-    6 => 'Jun',
-    7 => 'Jul',
-    8 => 'Aug',
-    9 => 'Sep',
-    10 => 'Oct',
-    11 => 'Nov',
-    12 => 'Dec'
-  ];
+    if (!$result) {
+      die("Query failed: " . mysqli_error($con));
+    }
 
-  while ($row = mysqli_fetch_assoc($result)) {
-    $data[] = [
-      'month' => $monthNames[$row['month']],
-      'total' => $row['total']
+    $registeredUserData = [];
+    $monthNames = [
+      1 => 'Jan',
+      2 => 'Feb',
+      3 => 'Mar',
+      4 => 'Apr',
+      5 => 'May',
+      6 => 'Jun',
+      7 => 'Jul',
+      8 => 'Aug',
+      9 => 'Sep',
+      10 => 'Oct',
+      11 => 'Nov',
+      12 => 'Dec'
     ];
-  }
 
-  // Report average score per Quizzez
-  $query = "SELECT QuizID, AVG(Score) AS average_score FROM membertakequiz GROUP BY QuizID";
-  $result = mysqli_query($con, $query);
-  
+    while ($row = mysqli_fetch_assoc($result)) {
+      $registeredUserData[] = [
+        'month' => $monthNames[$row['month']],
+        'total' => $row['total']
+      ];
+    }
 
-  // Check if the query executed successfully
-  if (!$result) {
-    die("Query failed: " . mysqli_error($con));
-  }
+    // Report average score per Quizzez
+    $query = "SELECT QuizID, AVG(Score) AS average_score FROM membertakequiz WHERE Status = 'Completed' GROUP BY QuizID";
+    $result = mysqli_query($con, $query);
 
-  $data2 = [];
-  while ($row = mysqli_fetch_assoc($result)) {
-    $data2[] = [
-      'quiz' => $row['QuizID'],
-      'avg_score' => $row['average_score']
-    ];
-  }
+    // Check if the query executed successfully
+    if (!$result) {
+      die("Query failed: " . mysqli_error($con));
+    }
 
-  mysqli_close($con);
+    $averageScoreData = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+      $averageScoreData[] = [
+        'quiz' => $row['QuizID'],
+        'avg_score' => $row['average_score']
+      ];
+    }
 
-  // Generate the chart using ApexCharts library
-  echo '<script>
-    // Chart 1
-    const data = ' . json_encode($data) . ';
+    //report for rating
+    $query = "SELECT Rating, COUNT(*) AS total FROM feedback GROUP BY Rating ORDER BY Rating DESC";
+    $result = mysqli_query($con, $query);
+    
+    if (!$result) {
+      die("Query failed: " . mysqli_error($con));
+    }
+    
+    $feedbackData = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+      $feedbackData[] = [
+        'rating' => $row['Rating'],
+        'total' => $row['total']
+      ];
+    }
+    mysqli_close($con);
+
+    // Generate the chart using ApexCharts library
+    echo '<script>
+    //chart default (overall progress)
+    const data = ' . json_encode($overallProgressData) . ';
     const options = {
-      chart: {
-        type: "bar",
-      },
       series: [{
         name: "Total",
         data: data.map(item => item.total),
       }],
-      xaxis: {
-        categories: data.map(item => item.month),
-      },
-    };
-    const chart1 = new ApexCharts(document.querySelector("#chart1"), options);
-    chart1.render();
-
-    // Chart 2
-    const data2 = ' . json_encode($data2) . ';
-    const options2 = {
       chart: {
+        height: 350,
         type: "bar",
+        toolbar: {
+          show: true
+        }
       },
-      series: [{
-        name: "Average Score",
-        data: data2.map(item => item.avg_score),
-      }],
+      plotOptions: {
+        bar: {
+          borderRadius: 10,
+          dataLabels: {
+            position: "top",
+          },
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        offsetY: -20,
+        style: {
+          fontSize: "12px",
+          colors: ["#008FFB"]
+        },
+        formatter: function (val) {
+          return val;
+        }
+      },
       xaxis: {
-        categories: data2.map(item => item.quiz),
+        categories: data.map(item => item.status),
+        position: "bottom",
+        axisBorder: {
+          show: false
+        },
+        axisTicks: {
+          show: false
+        },
+        crosshairs: {
+          fill: {
+            type: "gradient",
+            gradient: {
+              colorFrom: "#D8E3F0",
+              colorTo: "#BED1E6",
+              stops: [0, 100],
+              opacityFrom: 0.4,
+              opacityTo: 0.5,
+            }
+          }
+        },
+        tooltip: {
+          enabled: true,
+        }
       },
+      colors: ["#008FFB"],
+      yaxis: {
+        axisBorder: {
+          show: false
+        },
+        axisTicks: {
+          show: false,
+        },
+        labels: {
+          show: false,
+        }
+      },          
+      title: {
+        text: "Overall User Progress",
+        align: "center",
+        style: {
+          color: "#444",
+          fontSize: "14px",
+          fontWeight: "bold",
+          fontFamily: "Arial, sans-serif",
+        }
+      }
     };
-    const chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
-    chart2.render();
-  </script>';
+
+    const chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+
+    
+    function chartSelection(chartSelected) {
+      if (chart) {
+        chart.destroy();
+      }
+
+      if (chartSelected === "feedbackRating") {
+        const feedbackData = '.json_encode($feedbackData).';
+        const options = {
+          series: [{
+            data: feedbackData.map(item => item.total),
+            name:"Total",
+          }],
+          chart: {
+            height: 350,
+            type: "bar",
+            toolbar: {
+              show: true, 
+            },
+          },
+          plotOptions: {
+            bar: {
+              borderRadius: 4,
+              horizontal: true,
+            },
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          xaxis: {
+            categories: feedbackData.map(item => item.rating),
+            name: "Rating",
+            title: {
+              text: "Total",
+              style: {
+                fontSize: "14px",
+                fontWeight: 600,
+              },
+            },
+          },
+          colors: ["#FF4560"],
+          yaxis: {
+            title: {
+              text: "Rating",
+              style: {
+                fontSize: "14px",
+                fontWeight: 600,
+              },
+            },
+          },
+          title: {
+            text: "Rating feedback given by user",
+            align: "center",
+            style: {
+              color: "#444",
+              fontSize: "14px",
+              fontWeight: "bold",
+              fontFamily: "Arial, sans-serif",
+            }
+          }
+        };
+        const chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+      } else if (chartSelected === "registeredUser") {
+        // Chart user progress
+        const data = ' . json_encode($registeredUserData) . ';
+        const options = {
+          series: [{
+            name: "Total",
+            data: data.map(item => item.total),
+          }],
+          chart: {
+            height: 350,
+            type: "bar",
+            toolbar: {
+              show: true
+            }
+          },
+          plotOptions: {
+            bar: {
+              borderRadius: 10,
+              dataLabels: {
+                position: "top",
+              },
+            }
+          },
+          dataLabels: {
+            enabled: true,
+            offsetY: -20,
+            style: {
+              fontSize: "12px",
+              colors: ["#304758"]
+            }
+          },
+          xaxis: {
+            categories: data.map(item => item.month),
+            position: "bottom",
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false
+            },
+            crosshairs: {
+              fill: {
+                type: "gradient",
+                gradient: {
+                  colorFrom: "#D8E3F0",
+                  colorTo: "#BED1E6",
+                  stops: [0, 100],
+                  opacityFrom: 0.4,
+                  opacityTo: 0.5,
+                }
+              }
+            },
+            tooltip: {
+              enabled: true,
+            }
+          },
+          colors: ["#FEB019"],
+          yaxis: {
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false,
+            },
+            labels: {
+              show: false,
+            }
+          },
+          title: {
+            text: "Registered user monthly",
+            align: "center",
+            style: {
+              color: "#444",
+              fontSize: "14px",
+              fontWeight: "bold",
+              fontFamily: "Arial, sans-serif",
+            }
+          }
+        };
+        const chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+      }else if (chartSelected === "averageScore") {
+        // Chart averageScore
+        const data = ' . json_encode($averageScoreData) . ';
+        const options = {
+          series: [{
+            name: "Average Score",
+            data: data.map(item => item.avg_score),
+          }],
+          chart: {
+            height: 350,
+            type: "bar",
+            toolbar: {
+              show: true
+            }
+          },
+          plotOptions: {
+            bar: {
+              borderRadius: 10,
+              dataLabels: {
+                position: "top", 
+              },
+            }
+          },
+          dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+              return val + "%";
+            },
+            offsetY: -20,
+            style: {
+              fontSize: "12px",
+              colors: ["#00E396"]
+            }
+          },
+          xaxis: {
+            categories: data.map(item => item.quiz),
+            position: "bottom",
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false
+            },
+            crosshairs: {
+              fill: {
+                type: "gradient",
+                gradient: {
+                  colorFrom: "#D8E3F0",
+                  colorTo: "#BED1E6",
+                  stops: [0, 100],
+                  opacityFrom: 0.4,
+                  opacityTo: 0.5,
+                }
+              }
+            },
+            tooltip: {
+              enabled: true,
+            }
+          },
+          colors: ["#00E396"],
+          yaxis: {
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false,
+            },
+            labels: {
+              show: false,
+              formatter: function (val) {
+                return val + "%";
+              }
+            }
+          },
+          title: {
+            text: "Average score for each quiz",
+            align: "center",
+            style: {
+              color: "#444",
+              fontSize: "14px",
+              fontWeight: "bold",
+              fontFamily: "Arial, sans-serif",
+            }
+          }
+        };
+        const chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+      }else{
+        //chart default (overall progress)
+        const data = ' . json_encode($overallProgressData) . ';
+        const options = {
+          series: [{
+            name: "Total",
+            data: data.map(item => item.total),
+          }],
+          chart: {
+            height: 350,
+            type: "bar",
+            toolbar: {
+              show: true
+            }
+          },
+          plotOptions: {
+            bar: {
+              borderRadius: 10,
+              dataLabels: {
+                position: "top",
+              },
+            }
+          },
+          dataLabels: {
+            enabled: true,
+            offsetY: -20,
+            style: {
+              fontSize: "12px",
+              colors: ["#008FFB"]
+            },
+            formatter: function (val) {
+              return val;
+            }
+          },
+          xaxis: {
+            categories: data.map(item => item.status),
+            position: "bottom",
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false
+            },
+            crosshairs: {
+              fill: {
+                type: "gradient",
+                gradient: {
+                  colorFrom: "#D8E3F0",
+                  colorTo: "#BED1E6",
+                  stops: [0, 100],
+                  opacityFrom: 0.4,
+                  opacityTo: 0.5,
+                }
+              }
+            },
+            tooltip: {
+              enabled: true,
+            }
+          },
+          colors: ["#008FFB"],
+          yaxis: {
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false,
+            },
+            labels: {
+              show: false,
+            }
+          },
+          title: {
+            text: "Overall User Progress",
+            align: "center",
+            style: {
+              color: "#444",
+              fontSize: "14px",
+              fontWeight: "bold",
+              fontFamily: "Arial, sans-serif",
+            }
+          }
+        };
+    
+        const chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+      }
+  }
+</script>';
 ?>
+
+
 
 </body>
 

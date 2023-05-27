@@ -16893,10 +16893,17 @@ ul {
   display: none;
 }
 .report-card {
-  display: inline-block;
-  width: 100%;
-  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
+#chart {
+  width: 500%;
+  max-width: 500px; 
+  margin: 0 auto;
+}
+
 .card-columns {
   column-count: 2;
   column-gap: 1.25rem;
