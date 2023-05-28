@@ -1,3 +1,8 @@
+<?php
+  session_start();
+  $adminID = $_SESSION['adminID'];
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -314,13 +319,25 @@
                             <td class="border-bottom-0">
                               <p class="mb-0 fw-normal">' . $row["Email"] . '</p>
                             </td>
+                        ';
+                        if ($row["AdminID"] == $adminID) {
+                          echo '
+                            <td>
+                              <i class="ti ti-trash admin-to-user-action-icon" data-bs-toggle="tooltip" title="You Cannot Delete Your Own Account!"></i>
+                            </td>
+                          </tr>
+                          ';
+                        }
+                        else {
+                          echo '
                             <td>
                               <a href="#" class="admin-delete" data-id="' . $row["AdminID"] . '" data-bs-toggle="modal" data-bs-target="#delete-modal">
                                 <i class="ti ti-trash admin-to-user-action-icon" data-bs-toggle="tooltip" title="Delete"></i>
                               </a>
                             </td>
                           </tr>
-                        ';
+                          ';
+                        }
                       } while ($row = mysqli_fetch_assoc($result));
                     }
                   ?>
