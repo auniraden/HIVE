@@ -43,7 +43,7 @@
 
                       if ($getAdminID == $adminID && md5($getPassword) === $password) {
                         $_SESSION['adminID'] = $adminID;
-                        header("Location: index.php");
+                        header("Location: admin-home.php");
                         exit();
                       } else {
                         echo '<p class="text-center text-danger">Invalid username or password. Please try again.</p>';

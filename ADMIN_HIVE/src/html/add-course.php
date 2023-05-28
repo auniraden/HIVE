@@ -6,6 +6,7 @@
     $errorMsg = "";
     $successMsg = "";
 
+    //Generate New Course ID
     $query = "SELECT MAX(CourseID) AS max_id FROM course";
     $result = mysqli_query($con, $query);
     $row = mysqli_fetch_assoc($result);
@@ -16,24 +17,27 @@
         do {
             $courseID = $_POST['courseID'];
 
+            //If Admin Submit an Empty Course Name,
+            //Show Error Message Box
             if (empty($_POST['courseName'])) {
                 $errorMsg = "All the Fields Are Required!";
                 break;
             }
 
             $courseName = $_POST['courseName'];
-
             $sql = "INSERT INTO course VALUES ('$courseID','$courseName')";
-
             $result = mysqli_query($con, $sql);
-
+            //If Database / Query Error,
+            //Show Error Message Box
             if (!$result) {
                 $errorMsg = "Query Error: " . mysqli_error($con);
                 break;
             }
-
+            //If New Course Added Successfully,
+            //Show Success Message Box
             $successMsg = "Course Updated Successfully!";
 
+            //Generate New Course ID after Adding Course
             $query = "SELECT MAX(CourseID) AS max_id FROM course";
             $result = mysqli_query($con, $query);
             $row = mysqli_fetch_assoc($result);
@@ -65,7 +69,7 @@
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between mb-5 pt-3">
-          <a href="./index.php" class="text-nowrap logo-img">
+          <a href="./admin-home.php" class="text-nowrap logo-img">
             <img src="../assets/images/logos/HIVE-logo_Tbg.png" width="70" alt="Hive Logo" />
             <span style="color:gold; font-weight:bold;">HIVE</span>
           </a>
@@ -77,7 +81,7 @@
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./index.php" aria-expanded="false">
+              <a class="sidebar-link" href="./admin-home.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -124,12 +128,6 @@
                 <span class="hide-menu">Generate Report</span>
               </a>
             </li>
-            <li class="sidebar-item">
-            <a class="sidebar-link" href="logout.php" aria-expanded="false">
-              <i class="bi bi-box-arrow-left" style="font-size: 1.5em;"></i>
-              <span class="hide-menu">Logout</span>
-            </a>
-          </li>
           </ul>
         </nav>
         <!-- End Sidebar navigation -->
@@ -152,14 +150,8 @@
             </li>
             <li class="nav-item nav-item-pageTitle">
               <a class="nav-link" href="#">
-                <i class="ti ti-users"></i>
-                <span class="d-none d-lg-inline">Member Management</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
+                <i class="ti ti-book"></i>
+                <span class="d-none d-lg-inline">Course Management</span>
               </a>
             </li>
           </ul>
@@ -172,19 +164,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3">My Profile</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-mail fs-6"></i>
-                      <p class="mb-0 fs-3">My Account</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-list-check fs-6"></i>
-                      <p class="mb-0 fs-3">My Task</p>
-                    </a>
-                    <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="./logout.php" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -203,6 +183,7 @@
                 </div>
 
                 <?php
+                    //Error Message Box
                     if (!empty($errorMsg)) {
                         echo'
                             <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -211,6 +192,7 @@
                             </div>
                         ';
                     }
+                    //Success Message Box
                     if (!empty($successMsg)) {
                         echo'
                             <div class="alert alert-success alert-dismissible fade show" role="alert">

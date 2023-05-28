@@ -31,6 +31,8 @@
         $content = $_POST['content'];
 
         do {
+            //If Submission has Empty Field,
+            //Show Error Message Box
             if (empty($id) || empty($name) || empty($content)) {
                 $errorMsg = "All the Fields Are Required!";
                 break;
@@ -39,13 +41,15 @@
             $sql = "UPDATE material ".
                     "SET MaterialName = '$name', MaterialContent = '$content' " .
                     "WHERE MaterialID = '$id'";
-
             $result = mysqli_query($con, $sql);
-
+            //If Database / Query Error,
+            //Show Error Message Box
             if (!$result) {
                 $errorMsg = "Query Error: " . mysqli_error($con);
                 break;
             }
+            //If Material Edited Successfully,
+            //Show Success Message Box
             $successMsg = "Material Updated Successfully!";
 
             header("location: course-management.php");
@@ -75,7 +79,7 @@
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between mb-5 pt-3">
-          <a href="./index.php" class="text-nowrap logo-img">
+          <a href="./admin-home.php" class="text-nowrap logo-img">
             <img src="../assets/images/logos/HIVE-logo_Tbg.png" width="70" alt="Hive Logo" />
             <span style="color:gold; font-weight:bold;">HIVE</span>
           </a>
@@ -87,7 +91,7 @@
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./index.php" aria-expanded="false">
+              <a class="sidebar-link" href="./admin-home.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -134,12 +138,6 @@
                 <span class="hide-menu">Generate Report</span>
               </a>
             </li>
-            <li class="sidebar-item">
-            <a class="sidebar-link" href="logout.php" aria-expanded="false">
-              <i class="bi bi-box-arrow-left" style="font-size: 1.5em;"></i>
-              <span class="hide-menu">Logout</span>
-            </a>
-          </li>
           </ul>
         </nav>
         <!-- End Sidebar navigation -->
@@ -213,6 +211,7 @@
                 </div>
 
                 <?php
+                    //Error Message Box
                     if (!empty($errorMsg)) {
                         echo'
                             <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -220,6 +219,15 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         ';
+                    }
+                    //Success Message Box
+                    if (!empty($successMsg)) {
+                      echo'
+                          <div class="alert alert-success alert-dismissible fade show" role="alert">
+                              <strong>' . $successMsg . '</strong>
+                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                          </div>
+                      ';
                     }
                 ?>
 
@@ -243,22 +251,6 @@
                             <textarea class="form-control" name="content" rows="20"><?php echo $matContent; ?></textarea>
                         </div>
                     </div>
-
-                    <?php
-                        if (!empty($successMsg)) {
-                            echo'
-                                <div class="row mb-3">
-                                    <div class="col-sm-6">
-                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                            <strong>' . $successMsg . '</strong>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ';
-                        }
-                    ?>
-
                     <div class="row mb-3">
                         <div class="offset-sm-3 col-sm-3 d-grid">
                             <button type="submit" class="btn btn-primary">Submit</button>

@@ -1,38 +1,37 @@
 <?php
   //passing adminID (loggedin)
   session_start();
-  if (isset($_SESSION['adminID'])) {
-      $adminID = $_SESSION['adminID'];
-      include("config.php");
-      $sql = "SELECT COUNT(*) AS MemberCount FROM member";
-      $result = mysqli_query($con, $sql);
-      $data = mysqli_fetch_assoc($result);
-      $memberCount = $data['MemberCount'];
-    
-      $sql = "SELECT COUNT(*) AS AdminCount FROM admin";
-      $result = mysqli_query($con, $sql);
-      $data = mysqli_fetch_assoc($result);
-      $adminCount = $data['AdminCount'];
-    
-      $sql = "SELECT COUNT(*) AS MemRegLstWkCount FROM member WHERE
-              CreatedDate BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) AND
-              DATE_SUB(CURRENT_DATE(), INTERVAL -1 DAY)";
-      $result = mysqli_query($con, $sql);
-      $data = mysqli_fetch_assoc($result);
-      $memberRegLstWkCount = $data['MemRegLstWkCount'];
-    
-      $sql = "SELECT COUNT(*) AS GuestVisitCount FROM guest_visit WHERE
-              VisitDate BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) AND
-              DATE_SUB(CURRENT_DATE(), INTERVAL -1 DAY)";
-      $result = mysqli_query($con, $sql);
-      $data = mysqli_fetch_assoc($result);
-      $guestVisitCount = $data['GuestVisitCount'];
-    }else{
-      echo 'went wrong';
-    }
+  if(isset($_SESSION['adminID'])) {
+    $adminID = $_SESSION['adminID'];
+    include("config.php");
+    //Find Total Number of Members
+    $sql = "SELECT COUNT(*) AS MemberCount FROM member";
+    $result = mysqli_query($con, $sql);
+    $data = mysqli_fetch_assoc($result);
+    $memberCount = $data['MemberCount'];
 
+    //Find Total Number of Admins
+    $sql = "SELECT COUNT(*) AS AdminCount FROM admin";
+    $result = mysqli_query($con, $sql);
+    $data = mysqli_fetch_assoc($result);
+    $adminCount = $data['AdminCount'];
 
+    //Find Number of Members Registered Last Week
+    $sql = "SELECT COUNT(*) AS MemRegLstWkCount FROM member WHERE
+            CreatedDate BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) AND
+            DATE_SUB(CURRENT_DATE(), INTERVAL -1 DAY)";
+    $result = mysqli_query($con, $sql);
+    $data = mysqli_fetch_assoc($result);
+    $memberRegLstWkCount = $data['MemRegLstWkCount'];
 
+    //Find Number of Guests Visited Last Week
+    $sql = "SELECT COUNT(*) AS GuestVisitCount FROM guest_visit WHERE
+            VisitDate BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) AND
+            DATE_SUB(CURRENT_DATE(), INTERVAL -1 DAY)";
+    $result = mysqli_query($con, $sql);
+    $data = mysqli_fetch_assoc($result);
+    $guestVisitCount = $data['GuestVisitCount'];
+  }
 ?>
 
 <!doctype html>
@@ -56,7 +55,7 @@
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between mb-5 pt-3">
-          <a href="./index.php" class="text-nowrap logo-img">
+          <a href="./admin-home.php" class="text-nowrap logo-img">
             <img src="../assets/images/logos/HIVE-logo_Tbg.png" width="70" alt="Hive Logo" />
             <span style="color:gold; font-weight:bold;">HIVE</span>
           </a>
@@ -68,7 +67,7 @@
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./index.php" aria-expanded="false">
+              <a class="sidebar-link" href="./admin-home.php.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-layout-dashboard"></i>
                 </span>
@@ -100,7 +99,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-            <a class="sidebar-link" href="./feedback.php" aria-expanded="false">
+              <a class="sidebar-link" href="./feedback.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-message-dots"></i>
                 </span>
@@ -114,15 +113,7 @@
                 </span>
                 <span class="hide-menu">Generate Report</span>
               </a>
-            </li>
-            <li class="sidebar-item">
-            <a class="sidebar-link" href="logout.php" aria-expanded="false">
-              <i class="bi bi-box-arrow-left" style="font-size: 1.5em;"></i>
-              <span class="hide-menu">Logout</span>
-            </a>
-          </li>
           </ul>
-
         </nav>
         <!-- End Sidebar navigation -->
       </div>
@@ -148,12 +139,6 @@
                 <span class="d-none d-lg-inline">Dashboard</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
-              </a>
-            </li>
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
@@ -164,19 +149,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3">My Profile</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-mail fs-6"></i>
-                      <p class="mb-0 fs-3">My Account</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-list-check fs-6"></i>
-                      <p class="mb-0 fs-3">My Task</p>
-                    </a>
-                    <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    <a href="logout.php" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                   </div>
                 </div>
               </li>
@@ -228,6 +201,7 @@
           </div>
         </div>
         <!-- Row 2 -->
+        <!-- Line Graph for Number of Visitor Over Time -->
         <div class="row">
           <div class="col-lg-12 d-flex align-items-strech">
             <div class="card w-100">
@@ -242,6 +216,8 @@
             </div>
           </div>
         </div>
+        <!-- Row 3 -->
+        <!-- Information about New Members -->
         <div class="row">
           <div class="col-lg-4 d-flex align-items-stretch">
             <div class="card w-100">
@@ -251,6 +227,7 @@
                 </div>
                 <ul class="timeline-widget mb-0 position-relative mb-n5">
                   <?php
+                    //Select 5 Latest Created Members
                     $sql = "SELECT * FROM member ORDER BY CreatedDate DESC LIMIT 5";
                     $result = mysqli_query($con, $sql);
                     if (!$result) {
@@ -303,6 +280,7 @@
                     </thead>
                     <tbody>
                       <?php
+                        //Select 5 Latest Created Members
                         $sql = "SELECT * FROM member ORDER BY CreatedDate DESC LIMIT 5";
                         $result = mysqli_query($con, $sql);
                         if (!$result) {
@@ -355,6 +333,7 @@
       var dates = [];
       var counts = [];
 
+      //Fetch the Dates and Visitor Counts for Each Date
       $.ajax({
         url: 'fetch-visit-data.php',
         type: "get",
@@ -368,6 +347,7 @@
         }
       })
 
+      //Generate & Show Line Graph
       function showGraph(dates, counts) {
         var options = {
           chart:{
