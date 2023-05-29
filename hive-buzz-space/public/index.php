@@ -1,3 +1,24 @@
+<?php
+// Connect to your database (adjust the connection details accordingly)
+$host = "localhost";
+$username = "root";
+$password = "";
+$database = "hive";
+
+$conn = mysqli_connect($host, $username, $password, $database);
+if (!$conn) {
+  die("Connection failed: " . mysqli_connect_error());
+}
+
+// Execute the SQL query to insert the visit
+$sql = "INSERT INTO guest_visit (VisitId, VisitDate) VALUES (NULL, CURRENT_TIMESTAMP)";
+mysqli_query($conn, $sql);
+
+// Close the database connection
+mysqli_close($conn);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr">
 
