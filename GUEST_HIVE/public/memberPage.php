@@ -108,7 +108,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     </section>
     <!--Sub Menu Tab-->
     <div class="container-fluid">
-      <ul class="nav nav-tabs justify-content-center mt-3" id="myTab" role="tablist">
+      <ul class="nav nav-tabs justify-content-center mt-3" id="myTab" role="tablist" style="position:relative;z-index:5000;">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
             role="tab" aria-controls="home" aria-selected="true">
