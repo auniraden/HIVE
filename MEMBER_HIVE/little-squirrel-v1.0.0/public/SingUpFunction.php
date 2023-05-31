@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($password !== $confirmPassword) {
         // Passwords do not match, redirect back to the form page
         $_SESSION['error'] = "Passwords do not match";
-        header("Location: SignAndRegisterPage.php");
+        header("Location:RegisterPage.php");
         exit();
     }
 
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($result['count'] > 0) {
         // Username already exists, redirect back to the form page with an error message
         $_SESSION['error'] = "Username already exists";
-        header("Location: SignAndRegisterPage.php?error=Username already exists");
+        header("Location: RegisterPage.php?error=Username already exists");
         exit();
     }
 
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($result['count'] > 0) {
         // Email already exists, redirect back to the form page with an error message
         $_SESSION['error'] = "Email already exists";
-        header("Location: SignAndRegisterPage.php?error=Email already exists");
+        header("Location: RegisterPage.php?error=Email already exists");
         exit();
     }
 
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $memberID = generateMemberID($lastInsertedId);
 
     // Prepare the SQL statement
-    $stmt = $conn->prepare("INSERT INTO member (memberID, name, email, password) VALUES (:memberID, :name, :email, :password)");
+    $stmt = $conn->prepare("INSERT INTO member (memberID, name, email, password) VALUES (:memberID, :name, :email, :password);");
 
     // Bind the form data to the statement parameters
     $stmt->bindParam(':memberID', $memberID);
