@@ -346,6 +346,47 @@ var navbarInit = function navbarInit() {
     });
   }
 };
+
+/* -------------------------------------------------------------------------- */
+
+/*                                Drag and drop                               */
+
+/* -------------------------------------------------------------------------- */
+
+var dropArea = document.getElementById('drop-area');
+    
+    dropArea.addEventListener('drop', handleFileDrop);
+    dropArea.addEventListener('dragover', handleDragOver);
+
+    function handleFileDrop(event) {
+      event.preventDefault();
+
+      var files = event.dataTransfer.files;
+      // Handle the dropped files here
+      for (var i = 0; i < files.length; i++) {
+        uploadFile(files[i]);
+      }
+    }
+    function handleDragOver(event) {
+      event.preventDefault();
+    }
+
+    function uploadFile(file) {
+      var formData = new FormData();
+      formData.append('file', file);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'upload.php', true);
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          console.log('File uploaded successfully.');
+        }
+      };
+
+      xhr.send(formData);
+    }
+
 /* -------------------------------------------------------------------------- */
 
 /*                                Scroll To Top                               */
@@ -377,4 +418,5 @@ var scrollToTop = function scrollToTop() {
 docReady(navbarInit);
 docReady(detectorInit);
 docReady(scrollToTop);
+docReady(dropArea);
 //# sourceMappingURL=theme.js.map

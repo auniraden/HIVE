@@ -60,6 +60,15 @@
     scroll-behavior: smooth;
   }
 }
+#drop-area {
+  width: 500px;
+  height: 150px;
+  border: 2px dashed #ccc;
+  text-align: center;
+  line-height: 150px;
+  font-size: 20px;
+  margin-left: 35%;
+}
 
 body {
   margin: 0;
@@ -104,7 +113,7 @@ h6,
   font-family: "DM Serif Display", cursive;
   font-weight: 300;
   line-height: 1.2;
-  color: #002147;
+  color: #523a2a;
 }
 
 h1,
@@ -168,6 +177,7 @@ h6,
 p {
   margin-top: 0;
   margin-bottom: 1rem;
+  text-align: justify;
 }
 
 abbr[title],
@@ -588,6 +598,7 @@ progress {
 .list-unstyled {
   padding-left: 0;
   list-style: none;
+  text-align: justify;
 }
 
 .list-inline {
@@ -1650,7 +1661,7 @@ progress {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 auto;
     flex: 0 0 auto;
-    width: 41.66667%;
+    width: 60%;
   }
   .col-lg-6 {
     -webkit-box-flex: 0;
@@ -3639,9 +3650,15 @@ fieldset:disabled .btn {
 }
 
 .btn-primary {
+<<<<<<<< HEAD:MEMBER_HIVE/little-squirrel-v1.0.0/public/assets/css/theme.css
   color: #616161;
   background-color: #fdc800;
   border-color: #fdc800;
+========
+  color: #523a2a;
+  background-color: #FDC800;
+  border-color: #FDC800;
+>>>>>>>> origin/dev:GUEST_HIVE/public/assets/css/theme.css
 }
 
 .btn-primary:hover {
@@ -3686,6 +3703,7 @@ fieldset:disabled .btn {
 }
 
 .btn-secondary {
+<<<<<<<< HEAD:MEMBER_HIVE/little-squirrel-v1.0.0/public/assets/css/theme.css
   color: #fffefe;
   background-color: #002147;
   border-color: #002147;
@@ -3702,6 +3720,23 @@ fieldset:disabled .btn {
   color: #fffefe;
   background-color: #001c3c;
   border-color: #001a39;
+========
+  color: #FFFEFE;
+  background-color: #FDD026;
+  border-color: #523a2a;
+}
+
+.btn-secondary:hover {
+  color: #FFFEFE;
+  background-color: #FDD026;
+  border-color: #523a2a;
+}
+
+.btn-check:focus + .btn-secondary, .btn-secondary:focus {
+  color: #FFFEFE;
+  background-color: #FDD026;
+  border-color: #523a2a;
+>>>>>>>> origin/dev:GUEST_HIVE/public/assets/css/theme.css
   -webkit-box-shadow: 0 0 0 0 rgba(38, 66, 98, 0.5);
   box-shadow: 0 0 0 0 rgba(38, 66, 98, 0.5);
 }
@@ -3711,9 +3746,15 @@ fieldset:disabled .btn {
 .btn-secondary:active,
 .btn-secondary.active,
 .show > .btn-secondary.dropdown-toggle {
+<<<<<<<< HEAD:MEMBER_HIVE/little-squirrel-v1.0.0/public/assets/css/theme.css
   color: #fffefe;
   background-color: #001a39;
   border-color: #001935;
+========
+  color: #FFFEFE;
+  background-color: #FDD026;
+  border-color: #523a2a;
+>>>>>>>> origin/dev:GUEST_HIVE/public/assets/css/theme.css
 }
 
 .btn-check:checked + .btn-secondary:focus,
@@ -4057,14 +4098,20 @@ fieldset:disabled .btn {
 }
 
 .btn-outline-secondary {
-  color: #002147;
-  border-color: #002147;
+  color: #523a2a;
+  border-color: #523a2a;
 }
 
 .btn-outline-secondary:hover {
+<<<<<<<< HEAD:MEMBER_HIVE/little-squirrel-v1.0.0/public/assets/css/theme.css
   color: #fffefe;
   background-color: #002147;
   border-color: #002147;
+========
+  color: #FFFEFE;
+  background-color: #fdd026;
+  border-color: #fdd026;
+>>>>>>>> origin/dev:GUEST_HIVE/public/assets/css/theme.css
 }
 
 .btn-check:focus + .btn-outline-secondary,
@@ -4074,6 +4121,7 @@ fieldset:disabled .btn {
 }
 
 .btn-check:checked + .btn-outline-secondary,
+<<<<<<<< HEAD:MEMBER_HIVE/little-squirrel-v1.0.0/public/assets/css/theme.css
 .btn-check:active + .btn-outline-secondary,
 .btn-outline-secondary:active,
 .btn-outline-secondary.active,
@@ -4081,6 +4129,12 @@ fieldset:disabled .btn {
   color: #fffefe;
   background-color: #002147;
   border-color: #002147;
+========
+.btn-check:active + .btn-outline-secondary, .btn-outline-secondary:active, .btn-outline-secondary.active, .btn-outline-secondary.dropdown-toggle.show {
+  color: #FFFEFE;
+  background-color: #fdd026;
+  border-color: #fdd026;
+>>>>>>>> origin/dev:GUEST_HIVE/public/assets/css/theme.css
 }
 
 .btn-check:checked + .btn-outline-secondary:focus,
@@ -4092,9 +4146,14 @@ fieldset:disabled .btn {
   box-shadow: 0 0 0 0 rgba(0, 33, 71, 0.5);
 }
 
+<<<<<<<< HEAD:MEMBER_HIVE/little-squirrel-v1.0.0/public/assets/css/theme.css
 .btn-outline-secondary:disabled,
 .btn-outline-secondary.disabled {
   color: #002147;
+========
+.btn-outline-secondary:disabled, .btn-outline-secondary.disabled {
+  color: #fdd026;
+>>>>>>>> origin/dev:GUEST_HIVE/public/assets/css/theme.css
   background-color: transparent;
 }
 
@@ -5022,7 +5081,7 @@ fieldset:disabled .btn {
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  padding-top: 0.5rem;
+  padding-top: 0rem;
   padding-right: 1rem;
   padding-bottom: 0.5rem;
   padding-left: 1rem;
@@ -8909,7 +8968,7 @@ fieldset:disabled .btn {
 }
 
 .mb-3 {
-  margin-bottom: 1rem !important;
+  margin-bottom: 0rem !important;
 }
 
 .mb-4 {
@@ -8921,7 +8980,7 @@ fieldset:disabled .btn {
 }
 
 .mb-6 {
-  margin-bottom: 4rem !important;
+  margin-bottom: 2rem !important;
 }
 
 .mb-7 {
@@ -9862,9 +9921,13 @@ fieldset:disabled .btn {
 }
 
 .text-info {
+<<<<<<<< HEAD:MEMBER_HIVE/little-squirrel-v1.0.0/public/assets/css/theme.css
   color: #00b2b2 !important;
+========
+  color: #00B27E !important;
+>>>>>>>> origin/dev:GUEST_HIVE/public/assets/css/theme.css
 }
-
+me
 .text-warning {
   color: #fdc800 !important;
 }
@@ -9982,7 +10045,11 @@ fieldset:disabled .btn {
 }
 
 .bg-secondary {
+<<<<<<<< HEAD:MEMBER_HIVE/little-squirrel-v1.0.0/public/assets/css/theme.css
   background-color: #291c13 !important;
+========
+  background-color: #523a2a!important;
+>>>>>>>> origin/dev:GUEST_HIVE/public/assets/css/theme.css
 }
 
 .bg-success {
@@ -17830,7 +17897,7 @@ section {
 
 @media (min-width: 992px) {
   section {
-    padding-top: 7.5rem;
+    padding-top: 4rem;
     padding-bottom: 7.5rem;
   }
 }
@@ -18061,6 +18128,7 @@ ul {
 .container-xl,
 .container-xxl {
   position: relative;
+  top: 40px;
 }
 
 .all-0 {
@@ -18838,3 +18906,55 @@ ul {
 -----------------------------------------------*/
 
 /*# sourceMappingURL=theme.css.map */
+
+/*-----------------------------------------------
+|   Buzz Quiz Styles
+-----------------------------------------------*/
+
+#submit{
+  font-size: 20px;
+  background-color: #fdd026;
+  border: 0px;
+  border-radius: 3px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+#submit:hover{
+  background-color: #523a2a;
+  color:white;
+  cursor: pointer;
+}
+#reset{
+  font-size: 15px;
+  background-color: #bdbdbf;
+  border: 0px;
+  border-radius: 3px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+#reset:hover{
+  background-color: #523a2a;
+  color: white;
+  cursor: pointer;
+}
+.answers{
+  margin-bottom: 30px;
+}
+.answers label{
+  margin-left: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.question{
+  font-weight: bold;
+}
+
+.buzz-quiz{
+  width: 50%;
+  margin: auto;
+  padding: 0 25px 40px 10px;
+  border: 4px solid #523a2a;
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px DarkSlateGray;
+}

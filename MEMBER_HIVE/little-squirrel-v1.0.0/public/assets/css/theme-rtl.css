@@ -29,7 +29,11 @@
   --bs-gray: #F0F4F9;
   --bs-gray-dark: #616161;
   --bs-primary: #FDC800;
+<<<<<<<< HEAD:MEMBER_HIVE/little-squirrel-v1.0.0/public/assets/css/theme-rtl.css
   --bs-secondary: #6B3131;
+========
+  --bs-secondary: #523A2A;
+>>>>>>>> origin/dev:GUEST_HIVE/public/assets/css/theme-rtl.css
   --bs-success: #79B93C;
   --bs-info: #00B2B2;
   --bs-warning: #FDC800;
@@ -84,7 +88,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
   font-family: "DM Serif Display", cursive;
   font-weight: 300;
   line-height: 1.2;
-  color: #002147;
+  color: #523A2A;
 }
 
 h1, .h1 {
@@ -4789,9 +4793,9 @@ fieldset:disabled .btn {
   justify-content: space-between;
 }
 
-.navbar-brand {
-  padding-top: -0.046rem;
-  padding-bottom: -0.046rem;
+.navbar-brand  {
+  padding-top: 0rem;
+  padding-bottom: 0rem;
   margin-left: 1rem;
   font-size: calc(1.2978rem + 0.5736vw);
   white-space: nowrap;
