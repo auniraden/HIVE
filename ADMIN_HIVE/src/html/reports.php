@@ -135,9 +135,8 @@
                   <div class="form-group mt-4 text-center">
                     <label for="chartTypeDropdown">Select Chart Type:</label>
                     <select class="form-control btn btn-primary" id="chartTypeDropdown" onchange="chartSelection(this.value)">
-                      <option value="default">Overall User Progress</option>
-                      <option value="averageScore">Average Score Quiz</option>
                       <option value="registeredUser">Registered User</option>
+                      <option value="averageScore">Average Score Quiz</option>
                       <option value="feedbackRating">Feedback Rating</option>
                     </select>
                   </div>
@@ -163,22 +162,6 @@
       die("Connection failed: " . mysqli_connect_error());
     }
 
-    //report overall user progress
-    $query = "SELECT Status, COUNT(*) AS total FROM membertakequiz GROUP BY Status";
-    $result = mysqli_query($con, $query);
-
-    // Check if the query executed successfully
-    if (!$result) {
-      die("Query failed: " . mysqli_error($con));
-    }
-
-    $overallProgressData = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-      $overallProgressData[] = [
-        'status' => $row['Status'],
-        'total' => $row['total']
-      ];
-    }
 
     // Report registered user monthly
     $query = "SELECT MONTH(CreatedDate) AS month, COUNT(*) AS total FROM member GROUP BY MONTH(CreatedDate) ORDER BY month ASC";
@@ -212,7 +195,7 @@
     }
 
     // Report average score per Quizzez
-    $query = "SELECT QuizID, AVG(Score) AS average_score FROM membertakequiz WHERE Status = 'Completed' GROUP BY QuizID";
+    $query = "SELECT QuizID, AVG(Score) AS average_score FROM membertakequiz GROUP BY QuizID";
     $result = mysqli_query($con, $query);
 
     // Check if the query executed successfully
@@ -247,8 +230,8 @@
 
     // Generate the chart using ApexCharts library
     echo '<script>
-    //chart default (overall progress)
-    const data = ' . json_encode($overallProgressData) . ';
+    // Chart user progress
+    const data = ' . json_encode($registeredUserData) . ';
     const options = {
       series: [{
         name: "Total",
@@ -274,14 +257,11 @@
         offsetY: -20,
         style: {
           fontSize: "12px",
-          colors: ["#008FFB"]
-        },
-        formatter: function (val) {
-          return val;
+          colors: ["#304758"]
         }
       },
       xaxis: {
-        categories: data.map(item => item.status),
+        categories: data.map(item => item.month),
         position: "bottom",
         axisBorder: {
           show: false
@@ -305,7 +285,7 @@
           enabled: true,
         }
       },
-      colors: ["#008FFB"],
+      colors: ["#FEB019"],
       yaxis: {
         axisBorder: {
           show: false
@@ -316,9 +296,9 @@
         labels: {
           show: false,
         }
-      },          
+      },
       title: {
-        text: "Overall User Progress",
+        text: "Registered user monthly",
         align: "center",
         style: {
           color: "#444",
@@ -328,7 +308,6 @@
         }
       }
     };
-
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 
@@ -395,13 +374,13 @@
         };
         const chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
-      } else if (chartSelected === "registeredUser") {
-        // Chart user progress
-        const data = ' . json_encode($registeredUserData) . ';
+      } else if (chartSelected === "averageScore") {
+        // Chart averageScore
+        const data = ' . json_encode($averageScoreData) . ';
         const options = {
           series: [{
-            name: "Total",
-            data: data.map(item => item.total),
+            name: "Average Score",
+            data: data.map(item => item.avg_score),
           }],
           chart: {
             height: 350,
@@ -414,20 +393,23 @@
             bar: {
               borderRadius: 10,
               dataLabels: {
-                position: "top",
+                position: "top", 
               },
             }
           },
           dataLabels: {
             enabled: true,
+            formatter: function (val) {
+              return val + "%";
+            },
             offsetY: -20,
             style: {
               fontSize: "12px",
-              colors: ["#304758"]
+              colors: ["#00E396"]
             }
           },
           xaxis: {
-            categories: data.map(item => item.month),
+            categories: data.map(item => item.quiz),
             position: "bottom",
             axisBorder: {
               show: false
@@ -451,7 +433,7 @@
               enabled: true,
             }
           },
-          colors: ["#FEB019"],
+          colors: ["#00E396"],
           yaxis: {
             axisBorder: {
               show: false
@@ -461,10 +443,13 @@
             },
             labels: {
               show: false,
+              formatter: function (val) {
+                return val + "%";
+              }
             }
           },
           title: {
-            text: "Registered user monthly",
+            text: "Average score for each quiz",
             align: "center",
             style: {
               color: "#444",
@@ -564,8 +549,8 @@
         const chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
       }else{
-        //chart default (overall progress)
-        const data = ' . json_encode($overallProgressData) . ';
+        // Chart user progress
+        const data = ' . json_encode($registeredUserData) . ';
         const options = {
           series: [{
             name: "Total",
@@ -591,14 +576,11 @@
             offsetY: -20,
             style: {
               fontSize: "12px",
-              colors: ["#008FFB"]
-            },
-            formatter: function (val) {
-              return val;
+              colors: ["#304758"]
             }
           },
           xaxis: {
-            categories: data.map(item => item.status),
+            categories: data.map(item => item.month),
             position: "bottom",
             axisBorder: {
               show: false
@@ -622,7 +604,7 @@
               enabled: true,
             }
           },
-          colors: ["#008FFB"],
+          colors: ["#FEB019"],
           yaxis: {
             axisBorder: {
               show: false
@@ -635,7 +617,7 @@
             }
           },
           title: {
-            text: "Overall User Progress",
+            text: "Registered user monthly",
             align: "center",
             style: {
               color: "#444",
@@ -645,9 +627,9 @@
             }
           }
         };
-    
         const chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
+
       }
   }
 </script>';
