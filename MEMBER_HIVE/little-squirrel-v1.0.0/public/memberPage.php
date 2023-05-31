@@ -254,7 +254,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
             </div>
             <div class="card-body">
               <?php
-              $sql = "SELECT COUNT(QuizID) as id_count FROM membertakequiz;";
+              $sql = "SELECT COUNT(QuizID) as id_count FROM membertakequiz WHERE MemberID='$memberID';";
               $result = mysqli_query($conn, $sql);
               if ($result) {
                 $row = mysqli_fetch_assoc($result);
@@ -323,7 +323,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
           <div class="row">
             <?php
 
-            $sql = "SELECT * FROM membertakequiz;";
+            $sql = "SELECT * FROM membertakequiz WHERE MemberID='$memberID';";
             $result = mysqli_query($conn, $sql);
             while ($data = mysqli_fetch_assoc($result)) {
               $score = $data['Score'];
