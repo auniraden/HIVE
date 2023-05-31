@@ -27,38 +27,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $question3 = $_POST['quizQuestion3'];
         $question4 = $_POST['quizQuestion4'];
         $question5 = $_POST['quizQuestion5'];
-        if ($question1 === $quizAnswer1) {
+        if ($question1 == $quizAnswer1) {
             $score += 2;
         }
-        if ($question2 === $quizAnswer2) {
+        if ($question2 == $quizAnswer2) {
             $score += 2;
         }
-        if ($question3 === $quizAnswer3) {
+        if ($question3 == $quizAnswer3) {
             $score += 2;
         }
-        if ($question4 === $quizAnswer4) {
+        if ($question4 == $quizAnswer4) {
             $score += 2;
         }
-        if ($question5 === $quizAnswer5) {
+        if ($question5 == $quizAnswer5) {
             $score += 2;
         }
-        // TEST1
-        // Generate a new TakeQuizID $nextID = 1; 
-        // Default value if no previous records exist 
-        if ($row = mysqli_fetch_assoc($result)) 
-        { $max_id = $row['max_id']; $nextID = intval(substr($max_id, 2)) + 1;
-        // Extract numeric portion and increment } $takequizID = 'TQ' . str_pad($nextID, 2, '0', STR_PAD_LEFT); 
-        // Insert the quiz results $sql2 = "INSERT INTO membertakequiz(TakeQuizID, Score, MemberID, QuizID) VALUES ('$takequizID', '$score', '$memberID', '$quizID');"; $result2 = mysqli_query($conn, $sql2);
+
         $memberID = $_SESSION['memberID'];
         $query = "SELECT MAX(TakeQuizID) AS max_id FROM membertakequiz;";
         $result = mysqli_query($conn, $query);
         $row = mysqli_fetch_assoc($result);
         $max_id = $row['max_id'];
         $nextID = intval(substr($max_id, 2)) + 1;
-        $takequizID = 'TQ' . str_pad($nextID, 2, '0', STR_PAD_LEFT); 
-        $sql2 = "INSERT INTO membertakequiz(TakeQuizID, Score, MemberID, QuizID) VALUES ('$takequizID', '$score', '$memberID', '$quizID');"; 
+        $takequizID = 'TQ' . str_pad($nextID, 2, '0', STR_PAD_LEFT);
+        $sql2 = "INSERT INTO membertakequiz(TakeQuizID, Score, MemberID, QuizID) VALUES ('$takequizID', '$score', '$memberID', '$quizID');";
         $result2 = mysqli_query($conn, $sql2);
-        
+
 
         // Check the result of mysqli_stmt_execute()
         if ($result2) {
@@ -70,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
     }
 }
-
 
 ?>
 
@@ -119,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="' . $autoQuizQuestion . '" value="' . $option2 . ' "
+                            <input class="form-check-input" type="radio" name="' . $autoQuizQuestion . '" value="' . $option2 . '"
                                 id="q' . $ai . 'b">
                             <label class="form-check-label" for="q' . $ai . 'b">
                                 ' . $option2 . ' 

@@ -9,6 +9,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
   $Name = $_SESSION['username'];
   $password = $_SESSION['password'];
   $email = $_SESSION['email'];
+
 } else {
   // 用户未登录
   header("Location:loginPage.php");
@@ -213,18 +214,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
                   </div>
                 </div>
               </div>
-              <div class="col-lg-3">
-                <div class="card border-0">
-                  <div class="card-header border-0 bg-white">
-                    <h5><i class="bi bi-trophy-fill pe-2"></i> Point</h5>
-                  </div>
-                  <div class="card-body">
-                    <h1 class="border-bottom border-danger">
-                      <?php echo $score ?>
-                    </h1>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
       </div>
@@ -273,7 +262,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
       </div>
       <!--Certificate Part-->
       <div class="tab-pane fade" id="cert" role="tabpanel" aria-labelledby="cert-tab">
-        <h1>Certificate</h1>
         <div class="container pb-5">
           <h1 class="text-center my-4">Certificate of Completion</h1>
           <div class="card mb-4">
@@ -291,7 +279,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
                 // Check if the count is greater than or equal to 4
                 if ($idCount >= 1) {
                   // Display the image
-                  echo '<img class="pb-3" src="assets\img\gallery\qr.png" alt="Image" style="width:200px; height:200px">';
+                  echo '<div id="qrcode-container"></div>';
                 } else {
                   // Hide the image
                   echo '<div style="display: none;"></div>';
@@ -333,9 +321,49 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
                   <h5 class="card-title">' . $materialName . '</h5>
                 </div>
                 <div class="card-body">
-                  <form action="quizPage.php" method="get">
-                    <button class="btn btn-primary" type="submit" name="quizID" value="' . $materialID . '">Start Learning</button>
+                  <form action="assessmentPage.php" method="post">
+                    <button class="btn btn-primary" type="submit" name="materialID" value="' . $materialID . '">Start Learning</button>
                   </form>
+                </div>
+              </div>
+            </div>
+            ';
+            }
+            ?>
+
+          </div>
+        </div>
+        <!--Score-->
+        <div class="container pb-5">
+          <h1 class="text-center my-4">Score</h1>
+          <div class="row">
+            <?php
+
+            $sql = "SELECT * FROM membertakequiz;";
+            $result = mysqli_query($conn, $sql);
+            while ($data = mysqli_fetch_assoc($result)) {
+              $score = $data['Score'];
+              $quizID = $data['QuizID'];
+              if ($quizID == "Q01") {
+                $quizTitle = "Quiz-1";
+              }
+              if ($quizID == "Q02") {
+                $quizTitle = "Quiz-2";
+              }
+              if ($quizID == "Q03") {
+                $quizTitle = "Quiz-3";
+              }
+              if ($quizID == "Q04") {
+                $quizTitle = "Quiz-4";
+              }
+              echo ' 
+              <div class="col-md-6">
+              <div class="card mb-4">
+                <div class="card-header">
+                  <h5 class="card-title">' . $quizTitle . '</h5>
+                </div>
+                <div class="card-body">
+                  <h3 class="">' . $score . ' / 10</h3>
                 </div>
               </div>
             </div>
@@ -350,11 +378,13 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
           <h1 class="text-center my-4">Quiz</h1>
           <div class="row">
             <?php
+
             $sql = "SELECT * FROM quiz;";
             $result = mysqli_query($conn, $sql);
             while ($data = mysqli_fetch_assoc($result)) {
               $quizName = $data['QuizName'];
               $quizID = $data['QuizID'];
+
               echo ' 
               <div class="col-md-6">
               <div class="card mb-4">
@@ -401,21 +431,22 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     });
   </script>
 
+
   <script>
-    var qrcode = new QRCode(document.getElementById("qrcode"), {
-      width: 128,
-      height: 128,
+    // Create QR code when button is clicked
+    document.getElementById("cert-tab").addEventListener("click", () => {
+      // new QRCode(Target container, text to encode)
+      var qrc = new QRCode(
+        document.getElementById("qrcode-container"),
+        "certificate.php?memberName=<?php echo $Name ?>"
+      );
     });
-
-    var text = "https://i.pinimg.com/736x/04/7b/57/047b57257ef4c7ac4fdb16633119d184.jpg"; //
-
-    qrcode.makeCode(text);
   </script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@latest"></script>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" src="jquery.qrcode.js"></script>
 
   <script src="vendors/@popperjs/popper.min.js"></script>
   <script src="vendors/bootstrap/bootstrap.min.js"></script>
