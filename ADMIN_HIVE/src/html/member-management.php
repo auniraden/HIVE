@@ -94,7 +94,7 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./report.php" aria-expanded="false">
+              <a class="sidebar-link" href="./reports.php" aria-expanded="false">
                 <span>
                   <i class="ti ti-clipboard-data"></i>
                 </span>
