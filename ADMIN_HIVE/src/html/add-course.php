@@ -179,7 +179,7 @@
           <div class="card w-100">
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between">
-                    <h5 class="card-title fw-semibold mb-4">Edit Course</h5>
+                    <h5 class="card-title fw-semibold mb-4">Add Course</h5>
                 </div>
 
                 <?php
