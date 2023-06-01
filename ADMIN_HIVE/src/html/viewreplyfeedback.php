@@ -1,4 +1,7 @@
 <?php
+session_start();
+$adminID = $_SESSION['adminID'];//logged in admin
+
 // get the feedback id from feedback page (hyperlink "replied")
 if (isset($_GET['feedbackID'])) {
   $feedbackID = $_GET['feedbackID'];
@@ -7,7 +10,7 @@ if (isset($_GET['feedbackID'])) {
 
   $query = "SELECT ReplyFeedbackID, FeedbackID, MemberID, Name, FeedbackReplied, AdminID, DateReplied
   FROM reply_feedback
-  WHERE FeedbackID = '$feedbackID'";
+  WHERE FeedbackID = '$feedbackID' AND AdminID = '$adminID'";
 
 
   $result = mysqli_query($con, $query);

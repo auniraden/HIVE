@@ -1,6 +1,5 @@
 <?php
 session_start();
-$adminID = $_SESSION['adminID'];
 // Delete
 if (isset($_POST['delete'])) {
     $feedbackID = $_POST['feedbackID'];
@@ -196,6 +195,8 @@ if (isset($_GET['feedbackID'])) {
               echo '<button type="reset" class="btn btn-secondary">Reset</button>';
               echo '</form>';
             } elseif (isset($_POST['reply'])) {
+
+              $adminID = $_SESSION['adminID'];
               $feedbackID = $_POST['feedbackID'];
               $replyMessage = $_POST['replyMessage'];
               $message = 'Feedback has been successfully replied!';
