@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     </li>
                     <li class="nav-item px-2"><a class="nav-link" aria-current="page"
                             href="contribute.php">Contribute</a></li>
-                </ul><a class="btn btn-primary order-1 order-lg-0" href="sign_up.php">Sign Up</a>
+                </ul><a class="btn btn-primary order-1 order-lg-0" href="RegisterPage.php">Sign Up</a>
                 <form class="d-flex my-3 d-block d-lg-none">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                     <button class="btn btn-outline-primary" type="submit">Search</button>

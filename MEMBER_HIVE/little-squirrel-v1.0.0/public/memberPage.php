@@ -66,7 +66,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
           <ul class="navbar-nav ms-auto pt-2 pt-lg-0 font-base">
             <li class="nav-item px-2"><a class="nav-link active" aria-current="page" href="index.php">Home</a></li>
             <li class="nav-item px-2"><a class="nav-link" aria-current="page" href="contribute.php">Contribute</a></li>
-          </ul><a class="btn btn-primary order-1 order-lg-0" href="RegisterPage.php">Sign Up</a>
+          </ul><a class="btn btn-primary order-1 order-lg-0" href="sign_up.php">Sign Up</a>
           <form class="d-flex my-3 d-block d-lg-none">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
             <button class="btn btn-outline-primary" type="submit">Search</button>
@@ -108,8 +108,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     </section>
     <!--Sub Menu Tab-->
     <div class="container-fluid">
-      <ul class="nav nav-tabs justify-content-center mt-3" id="myTab" role="tablist"
-        style="position:relative;z-index:10000;">
+      <ul class="nav nav-tabs justify-content-center mt-3" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
             role="tab" aria-controls="home" aria-selected="true">
@@ -201,48 +200,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
               </div>
             </div>
           </div>
-        </section>
-        <?php
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          $feedback = $_POST['feedback'];
-          $rating = $_POST['rating'];
-          $status = "Waiting for reply";
-          // next Id with F0
-          $query = "SELECT MAX(FeedbackID) AS max_id FROM feedback;";
-          $result = mysqli_query($conn, $query);
-          $row = mysqli_fetch_assoc($result);
-          $max_id = $row['max_id'];
-          $nextID = intval(substr($max_id, 2)) + 1;
-          $feedbackID = 'F' . str_pad($nextID, 2, '0', STR_PAD_LEFT);
-
-          //insert to database
-          $sql2 = "INSERT INTO feedback(FeedbackID, Feedback, Date, Rating, Status, MemberID) VALUES ('$feedbackID', '$feedback', CURDATE(), '$rating','$status','$memberID');";
-          $result2 = mysqli_query($conn, $sql2);
-        }
-
-        ?>
-        <section class="bg-600">
-          <div class="container">
-            <div class="row">
-              <div class="col">
-                <h6 class="font-sans-serif text-primary fw-bold">Feedback</h6>
-                <h1 class="mb-6">Give Us Some Feedback To Provide Better Experience To You!</h1>
-                <form method="POST" enctype="multipart/form-data">
-                  <div>
-                    <input type="text" name="feedback" placeholder="feedback" required><br><br>
-                    <label for="customRange2" class="form-label">Rate for us</label>
-                    <input type="range" name="rating" class="form-range" min="0" max="10">
-                  </div>
-                  <button type="submit">Summit</button>
-                </form>
-              </div>
-            </div>
-          </div>
-          <!-- end of .container-->
-          ``
-        </section>
       </div>
-
       <!--Member Home Page End-->
       <!--Member Profile Start-->
       <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
