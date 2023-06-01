@@ -132,72 +132,52 @@ if (isset($_SESSION['username'])) {
         <!-- ============================================-->
         <!-- <section> begin ============================-->
         <section class="bg-secondary">
-            <div class="container mx-auto">
+
+            <div class="container">
                 <div class="row">
-                    <div class="col-12 col-sm-12 col-lg-6 mb-4 order-3 order-sm-3">
-                        <p class="text-light">
-                            <i class="fas fa-map-marker-alt me-3"></i><span class="text-light">APU TPM, Bukit
-                                Jalil&nbsp;</span><a class="text-light" href="tel:+604-680-9785">+604-680-9785</a>
+                    <div class="col-12 col-sm-12 col-lg-6 mb-4 order-0 order-sm-0"><a class="text-decoration-none"
+                            href="index.php"><img src="assets/img/gallery/HIVE-logo_Tbg.png" height="150" /></a>
+                        <iframe style="margin-right: 70%;" class="text-light"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.1466274461595!2d101.7005614!3d3.0554056999999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc4abb795025d9%3A0x1c37182a714ba968!2sAsia%20Pacific%20University%20of%20Technology%20%26%20Innovation%20(APU)!5e0!3m2!1sen!2smy!4v1684836238184!5m2!1sen!2smy"
+                            width="300" height="200" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            alt="Asia Pacific University of Innovation & Technology"></iframe>
+                        <p class="text-light"> <i class="fas fa-envelope me-3"> </i><a class="text-light"
+                                href="mailto:buzzbuzz.HIVE@gmail.com?subject=Hello&body=Good day%20HIVE,">buzzbuzz.HIVE@gmail.com</a>
                         </p>
-                        <p class="text-light">
-                            <i class="fas fa-envelope me-3"> </i><a class="text-light"
-                                href="mailto:vctung@outlook.com">buzz.hive@gmail.com
-                            </a>
-                        </p>
-                        <p class="text-light">
-                            <i class="fas fa-phone-alt me-3"></i><a class="text-light"
-                                href="tel:1-800-800-2299">1-800-800-2299
-                                (Support)</a>
-                        </p>
+                        <p class="text-light"> <i class="fas fa-phone-alt me-3"></i><a class="text-light"
+                                href="tel:1-800-800-2299">1-800-800-2299 <--Need support?</a></p>
                     </div>
-                    <div class="col-6 col-sm-4 col-lg-2 mb-3 order-2 order-sm-1">
-                        <h5 class="lh-lg fw-bold mb-4 text-light font-sans-serif">
-                            Product
-                        </h5>
+                    <div style="margin-top:10%;" class="col-6 col-sm-4 col-lg-2 mb-3 order-2 order-sm-1">
+                        <h5 class="lh-lg fw-bold mb-4 text-light font-sans-serif">Product </h5>
                         <ul class="list-unstyled mb-md-4 mb-lg-0">
-                            <li class="lh-lg">
-                                <a class="text-200" href="#!">How Hive Works</a>
-                            </li>
-                            <li class="lh-lg">
-                                <a class="text-200" href="#!">Contribute</a>
-                            </li>
-                            <li class="lh-lg">
-                                <a class="text-200" href="#!">Help Center</a>
-                            </li>
+                            <li class="lh-lg"><a class="text-200" href="about-us.html">How HIVE works</a></li>
+                            <li class="lh-lg"><a class="text-200" href="contribute.php">Contribute</a></li>
+                            <li class="lh-lg"><a class="text-200" href="help-center.html">HELP center</a></li>
+                            <li class="lh-lg"><a class="text-200" href="loginPage.php">Sign in</a></li>
                         </ul>
                     </div>
-                    <div class="col-6 col-sm-4 col-lg-2 mb-3 order-3 order-sm-2">
-                        <h5 class="lh-lg fw-bold text-light mb-4 font-sans-serif">
-                            Company
-                        </h5>
+                    <div style="margin-top:10%;" class="col-6 col-sm-4 col-lg-2 mb-3 order-3 order-sm-2">
+                        <h5 class="lh-lg fw-bold text-light mb-4 font-sans-serif">Company</h5>
                         <ul class="list-unstyled mb-md-4 mb-lg-0">
-                            <li class="lh-lg">
-                                <a class="text-200" href="#!">About Us</a>
-                            </li>
-                            <li class="lh-lg">
-                                <a class="text-200" href="#!">Privacy & Policy</a>
-                            </li>
-                            <li class="lh-lg">
-                                <a class="text-200" href="#!">Feedback</a>
-                            </li>
+                            <li class="lh-lg"><a class="text-200" href="about-us.html">About us</a></li>
+                            <li class="lh-lg"><a class="text-200" href="privacy-policy.html">Privacy policy</a></li>
+                            <li class="lh-lg"><a class="text-200" href="guest_feedback.php">Give Feedback</a></li>
                         </ul>
                     </div>
-                    <div class="col-6 col-sm-4 col-lg-2 mb-3 order-3 order-sm-2">
-                        <h5 class="lh-lg fw-bold text-light mb-4 font-sans-serif">
-                            Contact Us
-                        </h5>
+                    <div style="margin-top:10%;" class="col-6 col-sm-4 col-lg-2 mb-3 order-3 order-sm-2">
+                        <h5 class="lh-lg fw-bold text-light mb-4 font-sans-serif">Contact us</h5>
                         <ul class="list-unstyled mb-md-4 mb-lg-0">
-                            <li class="lh-lg">
-                                <a class="text-200" href="#!">Join Us Now!</a>
-                            </li>
-                            <li class="lh-lg">
-                                <a class="text-200" href="#!">Email Us</a>
-                            </li>
+                            <li class="lh-lg"><a class="text-200"
+                                    href="mailto:buzzbuzz.HIVE@gmail.com?subject=Hello&body=Good day%20HIVE,">Email
+                                    us</a></li>
+                            <li class="lh-lg"><a class="text-200" href="sign_up.php">Join the HIVE</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <!-- end of .container-->
+
         </section>
         <!-- <section> close ============================-->
         <!-- ============================================-->
