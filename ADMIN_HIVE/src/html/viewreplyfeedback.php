@@ -16,14 +16,23 @@ if (isset($_GET['feedbackID'])) {
   $result = mysqli_query($con, $query);
   $row = mysqli_fetch_assoc($result);
 
-  $replyfeedbackID = $row['ReplyFeedbackID'];
-  $feedbackID = $row['FeedbackID'];
-  $memberID = $row['MemberID'];
-  $name = $row['Name'];
-  $feedbackReplied = $row['FeedbackReplied'];
-  $adminID = $row['AdminID'];
-  $date = $row['DateReplied'];
-  mysqli_close($con);
+  if($row){
+    $replyfeedbackID = $row['ReplyFeedbackID'];
+    $feedbackID = $row['FeedbackID'];
+    $memberID = $row['MemberID'];
+    $name = $row['Name'];
+    $feedbackReplied = $row['FeedbackReplied'];
+    $adminID = $row['AdminID'];
+    $date = $row['DateReplied'];
+    mysqli_close($con);
+  }else{
+    echo '<script type="text/javascript">
+    alert("This feedback was replied by another admin. You are not allowed to view it.");
+    window.location.href = "feedback.php";
+    </script>';
+    exit;
+  }
+  
 }
 
 ?>
@@ -38,6 +47,13 @@ if (isset($_GET['feedbackID'])) {
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos//HIVE-logo_Tbg.png" />
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+  <script>
+        function showWindowMessage(message, redirectURL) {
+            alert(message);
+            window.location.href = redirectURL;
+        }
+    </script>
 </head>
 
 <body>
