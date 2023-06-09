@@ -100,11 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="d-flex justify-content-center p-5">
-            <form action="quizPage.php" method="post">
-                <input class="btn btn-primary" type="submit" name="courseID" value="<?php echo $courseID; ?>">
-                </input>
-                <label class="form-control border-0 bg-white" for="courseID">Quiz</label>
-            </form>
+            <a class="btn btn-primary" href="memberPage.php">Back</a>
         </div>
 
         <section class="bg-secondary">
